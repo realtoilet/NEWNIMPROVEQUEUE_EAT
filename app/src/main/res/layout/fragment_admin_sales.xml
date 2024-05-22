@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AdminHomePage">
+
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="95dp"
+        android:background="@drawable/roundedrectangle2">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sales"
+            android:textStyle="bold"
+            android:letterSpacing="0.05"
+            android:textSize="35sp"
+            android:layout_centerInParent="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="25dp"
+            android:textColor="@color/white"/>
+    </RelativeLayout>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/blobright"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="15dp"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/blobleft"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="45dp"/>
+
+    <RelativeLayout
+        android:layout_width="310dp"
+        android:layout_height="250dp"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/bg_white_card">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="20dp">
+                <ImageView
+                    android:layout_width="280dp"
+                    android:layout_height="1dp"
+                    android:background="@color/black"
+                    android:layout_centerHorizontal="true"/>
+                <ImageView
+                    android:layout_width="280dp"
+                    android:layout_height="1dp"
+                    android:background="@color/black"
+                    android:layout_centerHorizontal="true"
+                    android:layout_alignParentBottom="true"/>
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat"
+                    android:text="Sold"
+                    android:textColor="@color/black"
+                    android:layout_centerVertical="true"
+                    android:textSize="23dp"
+                    android:layout_marginStart="20dp" />
+
+                <ImageView
+                    android:id="@+id/dash2"
+                    android:layout_width="80dp"
+                    android:layout_height="5dp"
+                    android:src="@drawable/dashh"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    />
+
+                <TextView
+                    android:id="@+id/numOfSold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:text="₱990"
+                    android:textColor="@color/black"
+                    android:textSize="23dp"
+                    android:layout_marginEnd="20dp"
+                    />
+
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="20dp">
+
+                <ImageView
+                    android:layout_width="280dp"
+                    android:layout_height="1dp"
+                    android:background="@color/black"
+                    android:layout_centerHorizontal="true"/>
+
+                <ImageView
+                    android:layout_width="280dp"
+                    android:layout_height="1dp"
+                    android:background="@color/black"
+                    android:layout_centerHorizontal="true"
+                    android:layout_alignParentBottom="true"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat"
+                    android:text="Capital"
+                    android:textColor="@color/black"
+                    android:layout_centerVertical="true"
+                    android:textSize="23dp"
+                    android:layout_marginStart="20dp" />
+
+                <ImageView
+                    android:id="@+id/dash"
+                    android:layout_width="80dp"
+                    android:layout_height="5dp"
+                    android:src="@drawable/dashh"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    />
+
+                <TextView
+                    android:id="@+id/numOfcapital"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:text="₱990"
+                    android:textColor="@color/black"
+                    android:textSize="23dp"
+                    android:layout_marginEnd="20dp"
+                    />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="20dp">
+
+                <ImageView
+                    android:layout_width="280dp"
+                    android:layout_height="1dp"
+                    android:background="@color/black"
+                    android:layout_centerHorizontal="true"/>
+
+                <ImageView
+                    android:layout_width="280dp"
+                    android:layout_height="1dp"
+                    android:background="@color/black"
+                    android:layout_centerHorizontal="true"
+                    android:layout_alignParentBottom="true"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat"
+                    android:text="Total"
+                    android:textColor="@color/black"
+                    android:layout_centerVertical="true"
+                    android:textSize="23dp"
+                    android:layout_marginStart="20dp" />
+
+                <ImageView
+                    android:id="@+id/dash3"
+                    android:layout_width="80dp"
+                    android:layout_height="5dp"
+                    android:src="@drawable/dashh"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    />
+
+                <TextView
+                    android:id="@+id/TotalIncome"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:text="₱990"
+                    android:textColor="@color/black"
+                    android:textSize="23dp"
+                    android:layout_marginEnd="20dp"
+                    />
+            </RelativeLayout>
+        </LinearLayout>
+
+
+
+    </RelativeLayout>
+</RelativeLayout>

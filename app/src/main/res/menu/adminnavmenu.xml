@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/servings"
+        android:title="Servings"
+        android:icon="@drawable/ic_inventorysvg"/>
+    <item android:id="@+id/sales"
+        android:title="Sales"
+        android:icon="@drawable/ic_statssvg"/>
+    <item android:id="@+id/placeholder"
+        android:title=""/>
+    <item android:id="@+id/seats"
+        android:title="Orders"
+        android:icon="@drawable/ic_orderssvg"/>
+    <item android:id="@+id/adminUserProfile"
+        android:title="Profile"
+        android:icon="@drawable/ic_usersvg"/>
+
+</menu>

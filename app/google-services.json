@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "970957719802",
+    "project_id": "queue-eat",
+    "storage_bucket": "queue-eat.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:970957719802:android:ebf084c0b1a504d2c46143",
+        "android_client_info": {
+          "package_name": "com.example.queueeat"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCfgEB8DpGHHdlP5jmnAfOpYLrfqAT9nSM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

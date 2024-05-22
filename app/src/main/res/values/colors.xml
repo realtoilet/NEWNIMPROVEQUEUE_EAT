@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="cyan">#007F85</color>
+    <color name="searchbar_color">#D6F8F7</color>
+    <color name="bgcolor">#09403E</color>
+    <color name="mint">#007F85</color>
+    <color name="dark_cyan">#004850</color>
+    <color name="cyan_btn">#22BAB6</color>
+    <color name="cyan_mint">#9FF9F6</color>
+    <color name="grey">#5A5C5C</color>
+    <color name="btn_color">#EFEFEF</color>
+    <color name="icon_btn_color">#023C42</color>
+    <color name="card_circle_border">#007F85</color>
+    <color name="bg_card_name_cl">#37C9C4</color>
+    <color name="bg_card_btn">#0B2527</color>
+    <color name="white_cards_bg">#F6F6F6</color>
+    <color name="white_gray">#E7E7E7</color>
+    <color name="red">#721B0F</color>
+
+    <color name="original_text_color">#023C42</color>
+    <color name="default_text_color">#023C42</color>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</resources>

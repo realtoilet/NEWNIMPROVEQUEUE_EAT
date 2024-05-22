@@ -1,0 +1,103 @@
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="295dp"
+    android:layout_height="295dp"
+    app:cardCornerRadius="5dp"
+    android:layout_margin="10dp"
+    app:cardBackgroundColor="@android:color/transparent"
+    app:cardElevation="0dp">
+
+    <FrameLayout
+        android:id="@+id/fl_bg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/cardbg"
+                android:layout_width="265dp"
+                android:layout_height="255dp"
+                android:layout_alignParentBottom="true"
+                android:src="@drawable/bg_card"
+                android:layout_alignParentEnd="true"/>
+
+            <RelativeLayout
+                android:id="@+id/image_border"
+                android:layout_width="160dp"
+                android:layout_height="160dp"
+                android:background="@drawable/circle_shape">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/itemImage"
+                    android:layout_width="161dp"
+                    android:layout_height="161dp"
+                    android:src="@drawable/sisigpic"
+                    android:layout_gravity="center"
+                    android:layout_margin="4dp"/>
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/itemPrice"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:fontFamily="@font/montserrat"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="60dp"
+                android:layout_toRightOf="@id/image_border"
+                android:layout_marginEnd="15dp"
+                android:layout_marginStart="10dp"
+                android:textSize="25sp"
+                android:textStyle="bold"
+                android:text="₱50.00"/>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/itemName"
+                    android:layout_width="150dp"
+                    android:layout_height="90dp"
+                    android:layout_alignParentBottom="true"
+                    android:background="@drawable/bg_card_name"
+                    android:fontFamily="@font/montserrat"
+                    android:padding="10dp"
+                    android:text="Sisigg"
+                    android:textStyle="bold"
+                    android:textColor="@color/white"
+                    android:textSize="30sp"
+                    android:gravity="center"
+                    android:layout_marginLeft="29.7dp"/>
+
+                <FrameLayout
+                    android:id="@+id/btn_AddToCart"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentBottom="true"
+                    >
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/fake_add_button"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:src="@color/bg_card_btn"/>
+                    <TextView
+                        android:id="@+id/add"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:textColor="@color/white"
+                        android:text="+"
+                        android:gravity="center"
+                        android:textSize="35sp"
+                        android:textAlignment="center"
+                        />
+                </FrameLayout>
+            </RelativeLayout>
+        </RelativeLayout>
+    </FrameLayout>
+</androidx.cardview.widget.CardView>

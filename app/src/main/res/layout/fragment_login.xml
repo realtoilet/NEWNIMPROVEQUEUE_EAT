@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".LoginFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="650dp"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/signupshape"
+        android:layout_above="@id/signupview">
+
+        <TextView
+            android:layout_width="270dp"
+            android:layout_height="40dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="15dp"
+            android:textStyle="bold"
+            android:fontFamily="@font/montserrat"
+            android:text="Login Account"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="32dp" />
+
+        <TextView
+            android:layout_width="250dp"
+            android:layout_height="40dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="60dp"
+            android:textStyle="normal"
+            android:fontFamily="@font/montserrat"
+            android:text="Login and continue your experience"
+            android:textColor="@color/white"
+            android:textAlignment="center"
+            android:textSize="11sp" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/signupview"
+        android:layout_width="match_parent"
+        android:layout_height="550dp"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/signupshapewhite">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="50dp"
+            app:boxBackgroundColor="@android:color/transparent"
+            app:startIconDrawable="@drawable/ic_userfilledsvg"
+            app:startIconTint="@color/cyan"
+            app:boxBackgroundMode="outline"
+            app:hintTextColor="@color/cyan"
+            app:cursorColor="@color/cyan"
+            app:endIconMode="clear_text"
+            app:endIconTint="@color/cyan"
+            app:boxStrokeColor="@color/box_outine_dark_cyan"
+            style="@style/stayNigga"
+            >
+            <EditText
+                android:id="@+id/AccName"
+                android:layout_width="300dp"
+                android:layout_height="54dp"
+                android:hint="Name"
+                android:paddingStart="40dp"
+                android:paddingEnd="10dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:textColorHint="@color/grey"
+                android:fontFamily="@font/montserrat"
+                android:padding="10dp"
+                android:ems="10"
+                style="@style/stayNigga"
+                android:textColor="@color/black"
+                android:singleLine="true"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/passlayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="130dp"
+            app:counterEnabled="true"
+            app:counterMaxLength="16"
+            app:boxBackgroundColor="@android:color/transparent"
+            app:endIconMode="password_toggle"
+            app:endIconTint="@color/cyan"
+            app:boxBackgroundMode="outline"
+            app:hintTextColor="@color/cyan"
+            app:cursorColor="@color/cyan"
+            app:startIconDrawable="@drawable/ic_locksvg"
+            app:startIconTint="@color/cyan"
+            app:boxStrokeColor="@color/box_outine_dark_cyan"
+            style="@style/stayNigga"
+            >
+
+            <EditText
+                android:id="@+id/AccPass"
+                android:layout_width="300dp"
+                android:layout_height="54dp"
+                android:ems="10"
+                android:fontFamily="@font/montserrat"
+                android:hint="Password"
+                android:paddingStart="40dp"
+                android:paddingTop="10dp"
+                android:paddingEnd="10dp"
+                android:paddingBottom="10dp"
+                android:singleLine="true"
+                style="@style/stayNigga"
+                android:textColor="@color/black"
+                android:inputType="textVisiblePassword"
+                android:textColorHint="@color/grey" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/tv_rememberMe"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/passlayout"
+            android:text="Remember me"
+            android:layout_marginTop="10dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="100dp"
+            android:fontFamily="@font/montserrat"
+            android:textColor="@color/cyan"
+            />
+
+        <CheckBox
+            android:id="@+id/cbox_rememberMe"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_below="@+id/passlayout"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="14dp"
+            android:layout_marginEnd="80dp"/>
+
+
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/login_button"
+            android:layout_width="220dp"
+            android:layout_height="70dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="100dp"
+            android:backgroundTint="@color/cyan_btn"
+            android:fontFamily="@font/montserrat"
+            android:text="Login"
+            android:textColor="@color/white"
+            android:textSize="20dp"
+            android:background="@drawable/btnround"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/signup_redirect"
+            android:text="I Dont have an account"
+            android:textColor="@color/cyan"
+            android:fontFamily="@font/montserrat"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="70dp"
+            android:textSize="15sp"/>
+
+
+
+
+    </RelativeLayout>
+
+</RelativeLayout>

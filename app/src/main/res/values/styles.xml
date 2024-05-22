@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Define your custom styles here -->
+    <style name="AppTheme" parent="Theme.MaterialComponents">
+        <!-- Customize theme attributes -->
+    </style>
+
+
+    <!-- Define a custom theme for the home screen -->
+    <style name="HomeTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize theme attributes -->
+        <item name="android:statusBarColor">@color/cyan</item>
+    </style>
+
+    <style name="Navigation" parent="Widget.Design.BottomNavigationView">
+
+        <item name="android:background">@color/cyan</item>
+        <item name="itemIconTint">@drawable/item_selector</item>
+        <item name="itemTextColor">@drawable/item_selector</item>
+        <item name="itemPaddingTop">10dp</item>
+        <item name="itemPaddingBottom">5dp</item>
+        <item name="itemIconSize">26dp</item>
+
+    </style>
+
+
+
+    <!-- res/values/styles.xml -->
+
+        <style name="CustomSearchViewStyle" parent="Widget.AppCompat.SearchView">
+            <item name="itemTextColor">@android:color/black</item>
+
+        </style>
+
+    <style name="CustomEditText" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="android:textCursorDrawable">@drawable/cursor_color</item>
+    </style>
+
+    <style name="stayNigga" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="android:textCursorDrawable">@drawable/cursor_color</item>
+    </style>
+
+
+
+</resources>

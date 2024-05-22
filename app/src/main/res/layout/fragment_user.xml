@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".UserFragment">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="95dp"
+        android:background="@drawable/roundedrectangle2">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="User Profile"
+            android:textStyle="bold"
+            android:letterSpacing="0.05"
+            android:textSize="35sp"
+            android:layout_centerInParent="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="25dp"
+            android:textColor="@color/white"/>
+    </RelativeLayout>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/blobright"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="15dp"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/blobleft"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="45dp"/>
+
+    <RelativeLayout
+        android:layout_width="350dp"
+        android:layout_height="150dp"
+        android:background="@drawable/bg_white_card"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="150dp">
+
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@drawable/ic_usersvg"
+            android:layout_margin="20dp"/>
+        <TextView
+            android:id="@+id/username"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="User Name"
+            android:layout_marginStart="125dp"
+            android:textColor="@color/black"
+            android:layout_marginTop="25dp"
+            android:textSize="20sp"
+            android:fontFamily="@font/montserrat"
+            android:layout_marginEnd="40dp"
+            />
+
+        <TextView
+            android:id="@+id/userGmail"
+            android:layout_below="@+id/username"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="example@gmail.com"
+            android:textColor="@color/black"
+            android:layout_marginTop="10dp"
+            android:textSize="15sp"
+            android:fontFamily="@font/montserrat"
+            android:layout_marginStart="125dp"
+            android:layout_marginEnd="20dp"
+            />
+    </RelativeLayout>
+
+
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_logout_user"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="20dp"
+        android:layout_centerHorizontal="true"
+        android:text="Log Out"
+        android:fontFamily="@font/montserrat"
+        android:textColor="@color/white_cards_bg"
+        android:textSize="20sp"
+        android:background="@drawable/btnround"/>
+
+</RelativeLayout>

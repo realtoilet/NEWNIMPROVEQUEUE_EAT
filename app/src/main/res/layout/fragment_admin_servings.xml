@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AdminHomePage">
+
+    <!-- TODO: Update blank fragment layout -->
+    <ImageView
+        android:id="@+id/header_shape"
+        android:layout_width="match_parent"
+        android:layout_height="170dp"
+        android:background="@drawable/roundedrectangle"/>
+
+    <TextView
+        android:id="@+id/HomeUsername"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="48dp"
+        android:layout_marginTop="50dp"
+        android:fontFamily="@font/montserrat"
+        android:padding="5dp"
+        android:text="Admin"
+        android:textColor="@color/white"
+        android:textSize="45dp" />
+
+
+
+
+
+
+    <EditText
+        android:id="@+id/search"
+        android:layout_width="350dp"
+        android:layout_height="55dp"
+        android:layout_below="@id/header_shape"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="-30dp"
+        android:background="@drawable/bgsearch"
+        android:drawableLeft="@drawable/ic_searchsvg"
+        android:drawablePadding="10dp"
+        android:ems="10"
+        android:hint="Search"
+        android:iconifiedByDefault="false"
+        android:nextFocusForward="@id/addImage"
+        android:paddingStart="30dp"
+        android:paddingTop="10dp"
+        android:paddingEnd="10dp"
+        android:paddingBottom="10dp"
+        android:singleLine="true"
+        android:textColor="@color/black"
+        android:textColorHint="@color/grey"
+        style="@style/CustomEditText" />
+
+
+    <RelativeLayout
+        android:id="@+id/fl_display_stocks"
+        android:layout_width="match_parent"
+        android:layout_height="450dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginStart="30dp"
+        android:layout_below="@id/search"
+        android:background="@drawable/bg_white_card">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Items"
+            android:textColor="@color/black"
+            android:fontFamily="@font/montserrat"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="10dp"
+            android:textSize="18dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Inventory"
+            android:textColor="@color/black"
+            android:fontFamily="@font/montserrat"
+            android:layout_marginLeft="100dp"
+            android:layout_marginTop="10dp"
+            android:textSize="18dp"
+            android:layout_marginBottom="1dp"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv"
+            android:layout_width="match_parent"
+            android:layout_height="388dp"
+            android:layout_marginTop="45dp" />
+
+
+
+
+
+    </RelativeLayout>
+
+</RelativeLayout>

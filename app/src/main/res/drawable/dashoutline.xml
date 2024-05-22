@@ -1,0 +1,11 @@
+<!-- dashed_outline.xml -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <solid android:color="@android:color/transparent" /> <!-- Optional: To make the inside of the rectangle transparent -->
+
+    <stroke
+        android:width="2dp"
+    android:color="#000000"
+    android:dashWidth="4dp"
+    android:dashGap="2dp" />
+</shape>
