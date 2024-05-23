@@ -25,6 +25,7 @@ import com.google.firebase.Firebase;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class SigninPage extends AppCompatActivity {
+  static ViewPager vp2;
     public ActivitySigninPageBinding bind;
     public ViewPager2 vp;
     @Override

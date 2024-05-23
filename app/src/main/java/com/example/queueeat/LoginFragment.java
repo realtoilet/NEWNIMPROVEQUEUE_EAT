@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.ArrayMap;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,10 +25,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
 public class LoginFragment extends Fragment {
 
     ViewPager2 vp2;
@@ -50,6 +45,7 @@ public class LoginFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_login, container, false);
 
         db = FirebaseFirestore.getInstance();
+        sharedPreferences = getActivity().getSharedPreferences("QueueEatPrefs", Context.MODE_PRIVATE);
 
         EditText accpass = view.findViewById(R.id.AccPass);
         EditText accname = view.findViewById(R.id.AccName);
@@ -61,7 +57,7 @@ public class LoginFragment extends Fragment {
         Button loginButton = view.findViewById(R.id.login_button);
 
         TextView loginRedirectTextView = view.findViewById(R.id.signup_redirect);
-        loginRedirectTextView.setOnClickListener(v-> vp2.setCurrentItem(vp2.getCurrentItem() - 1));
+        loginRedirectTextView.setOnClickListener(v -> vp2.setCurrentItem(vp2.getCurrentItem() + 1));
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,89 +65,55 @@ public class LoginFragment extends Fragment {
                 String username = accname.getText().toString();
                 String password = accpass.getText().toString();
 
-                db.collection("USERS").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        String email = null;
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot post : task.getResult()) {
-                                String childusername = post.getString("username");
-                                if (username.equals(childusername)) {
-                                    email = post.getString("email");
-                                    break;
-                                }
-                            }
-                            if(email == null) {
-                                Log.d("aha","raha");
-                            }
-                            Log.d("email", String.valueOf(email));
-                            if (username.isEmpty() || password.isEmpty()) {
-                                Toast.makeText(getContext(), "Please fill up all the fields.", Toast.LENGTH_SHORT).show();
-                            } else {
-                                if (username.equals("admin") && password.equals("admin123")) {
-                                    SharedPrefUtils.forDataUsage(getContext(), username, email.toString());
-                                    startActivity(new Intent(getActivity(), AdminHomePage.class).putExtra("user", SharedPrefUtils.returnEmailData(getContext())).putExtra("email",email.toString()));
-                                    if (rememberMeCheckBox.isChecked()) {
-                                        SharedPrefUtils.saveAccount(getContext(), username, password, "admin", email.toString());
+                if (username.isEmpty() || password.isEmpty()) {
+                    Toast.makeText(getContext(), "Please fill up all the fields.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                db.collection("USERS")
+                        .whereEqualTo("username", username)
+                        .get()
+                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                if (task.isSuccessful() && !task.getResult().isEmpty()) {
+                                    DocumentSnapshot document = task.getResult().getDocuments().get(0);
+                                    String email = document.getString("email");
+
+                                    if (username.equals("admin") && password.equals("admin123")) {
+                                        SharedPrefUtils.forDataUsage(getContext(), username, email);
+                                        startActivity(new Intent(getActivity(), AdminHomePage.class)
+                                                .putExtra("user", SharedPrefUtils.returnEmailData(getContext()))
+                                                .putExtra("email", email));
+                                        if (rememberMeCheckBox.isChecked()) {
+                                            SharedPrefUtils.saveAccount(getContext(), username, password, "admin", email);
+                                        }
+                                    } else {
+                                        FirebaseUtils fu = new FirebaseUtils();
+                                        fu.loginAccount(username, password, db, new FirebaseUtils.LoginCallback() {
+                                            @Override
+                                            public void loginResult(boolean result) {
+                                                if (result) {
+                                                    SharedPrefUtils.forDataUsage(getContext(), username, email);
+                                                    startActivity(new Intent(getActivity(), HomePage.class)
+                                                            .putExtra("user", SharedPrefUtils.returnEmailData(getContext()))
+                                                            .putExtra("email", email));
+                                                    if (rememberMeCheckBox.isChecked()) {
+                                                        SharedPrefUtils.saveAccount(getContext(), username, password, "buyer", email);
+                                                    }
+                                                } else {
+                                                    Toast.makeText(getContext(), "Account not found.", Toast.LENGTH_SHORT).show();
+                                                }
+                                            }
+                                        });
                                     }
                                 } else {
-                                    FirebaseUtils fu = new FirebaseUtils();
-                                    String finalEmail = email;
-                                    fu.loginAccount(username, password, db, new FirebaseUtils.LoginCallback() {
-                                        @Override
-                                        public void loginResult(boolean result) {
-                                            if (result) {
-                                                SharedPrefUtils.forDataUsage(getContext(), username, finalEmail.toString());
-                                                startActivity(new Intent(getActivity(), HomePage.class).putExtra("user", SharedPrefUtils.returnEmailData(getContext())).putExtra("email", finalEmail.toString()));
-                                                if (rememberMeCheckBox.isChecked()) {
-                                                    SharedPrefUtils.saveAccount(getContext(), username, password, "buyer", finalEmail.toString());
-                                                    startActivity(new Intent(getActivity(), HomePage.class).putExtra("user", SharedPrefUtils.returnUsernameForData(getContext())));
-                                                }
-                                            } else {
-                                                Toast.makeText(getContext(), "Account not found.", Toast.LENGTH_SHORT).show();
-                                            }
-                                        }
-                                    });
+                                    Toast.makeText(getContext(), "Account not found.", Toast.LENGTH_SHORT).show();
                                 }
                             }
-                        }
-                    }
-                });
+                        });
             }
         });
         return view;
-//        if(email == null) {
-//            Log.d("aha","raha");
-//        }
-//        Log.d("email", String.valueOf(email));
-//        if (username.isEmpty() || password.isEmpty()) {
-//            Toast.makeText(getContext(), "Please fill up all the fields.", Toast.LENGTH_SHORT).show();
-//        } else {
-//            if (username.equals("admin") && password.equals("adminadmin123")) {
-//                SharedPrefUtils.forDataUsage(getContext(), username, email.toString());
-//                startActivity(new Intent(getActivity(), AdminHomePage.class).putExtra("user", SharedPrefUtils.returnEmailData(getContext())).putExtra("email",email.toString()));
-//                if (rememberMeCheckBox.isChecked()) {
-//                    SharedPrefUtils.saveAccount(getContext(), username, password, "admin", email.toString());
-//                }
-//            } else {
-//                FirebaseUtils fu = new FirebaseUtils();
-//                fu.loginAccount(username, password, db, new FirebaseUtils.LoginCallback() {
-//                    @Override
-//                    public void loginResult(boolean result) {
-//                        if (result) {
-//                            SharedPrefUtils.forDataUsage(getContext(), username, email.toString());
-//                            startActivity(new Intent(getActivity(), HomePage.class).putExtra("user", SharedPrefUtils.returnEmailData(getContext())).putExtra("email", email.toString()));
-//                            if (rememberMeCheckBox.isChecked()) {
-//                                SharedPrefUtils.saveAccount(getContext(), username, password, "buyer", email.toString());
-//                            }
-//                        } else {
-//                            Toast.makeText(getContext(), "Account not found.", Toast.LENGTH_SHORT).show();
-//                        }
-//                    }
-//                });
-//            }
-//        }
-//    }
     }
 }
-
