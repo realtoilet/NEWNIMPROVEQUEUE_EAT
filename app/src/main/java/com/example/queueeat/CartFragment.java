@@ -138,12 +138,17 @@ public class CartFragment extends Fragment {
                     HomePage.vp2.setCurrentItem(HomePage.vp2.getCurrentItem() - 1);
                     d.dismiss();
 
+
+
                 }
 
             });
 
         });
     }
+
+
+
 
     private class ScreenSlidePageAdapter extends FragmentStateAdapter {
         public ScreenSlidePageAdapter(CartFragment ac) {

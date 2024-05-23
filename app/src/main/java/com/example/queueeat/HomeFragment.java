@@ -26,16 +26,17 @@ import android.widget.TextView;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class HomeFragment extends Fragment {
-
+    private static final String ARG_USER = "user";
     static String user;
-    public HomeFragment(String user) {
-        this.user = user;
-    }
 
     List<ProductClass> p;
     static RecyclerView recyclerView;
     TextView homeusername;
     View a,b;
+
+    public HomeFragment(String user){
+        this.user = user;
+    }
 
 
     @Override
@@ -44,6 +45,8 @@ public class HomeFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+
+
 
         FirebaseUtils.retrieveAllProducts(FirebaseFirestore.getInstance(), getContext());
 
@@ -91,6 +94,7 @@ public class HomeFragment extends Fragment {
         });
 
         homeusername.setText(SharedPrefUtils.returnUsernameForData(getContext()));
+        user = SharedPrefUtils.returnUsernameForData(getContext());
         return view;
     }
 

@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 // Import FrameLayout
@@ -81,6 +82,8 @@ public class QueueFragment extends Fragment {
                 endTimerDialog.dismiss();
             });
         }
+        endTimerDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        endTimerDialog.getWindow().setGravity(Gravity.CENTER);
         endTimerDialog.show(); // Show the inflated dialog
     }
 }

@@ -88,7 +88,7 @@ public class LoginFragment extends Fragment {
                             if (username.isEmpty() || password.isEmpty()) {
                                 Toast.makeText(getContext(), "Please fill up all the fields.", Toast.LENGTH_SHORT).show();
                             } else {
-                                if (username.equals("admin") && password.equals("adminadmin123")) {
+                                if (username.equals("admin") && password.equals("admin123")) {
                                     SharedPrefUtils.forDataUsage(getContext(), username, email.toString());
                                     startActivity(new Intent(getActivity(), AdminHomePage.class).putExtra("user", SharedPrefUtils.returnEmailData(getContext())).putExtra("email",email.toString()));
                                     if (rememberMeCheckBox.isChecked()) {
@@ -105,6 +105,7 @@ public class LoginFragment extends Fragment {
                                                 startActivity(new Intent(getActivity(), HomePage.class).putExtra("user", SharedPrefUtils.returnEmailData(getContext())).putExtra("email", finalEmail.toString()));
                                                 if (rememberMeCheckBox.isChecked()) {
                                                     SharedPrefUtils.saveAccount(getContext(), username, password, "buyer", finalEmail.toString());
+                                                    startActivity(new Intent(getActivity(), HomePage.class).putExtra("user", SharedPrefUtils.returnUsernameForData(getContext())));
                                                 }
                                             } else {
                                                 Toast.makeText(getContext(), "Account not found.", Toast.LENGTH_SHORT).show();

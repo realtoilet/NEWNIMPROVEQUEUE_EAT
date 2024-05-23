@@ -10,6 +10,7 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.widget.ViewPager2;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +27,7 @@ public class SignupFragment extends Fragment {
 
     ViewPager2 vp2;
     FirebaseFirestore db;
+    EditText newaccname, newaccemail;
     public SignupFragment(ViewPager2 vp2) {
         this.vp2 = vp2;
     }
@@ -40,8 +42,8 @@ public class SignupFragment extends Fragment {
         db = FirebaseFirestore.getInstance();
 
         EditText newaccpass = view.findViewById(R.id.newAccPass);
-        EditText newaccname = view.findViewById(R.id.newAccName);
-        EditText newaccemail = view.findViewById(R.id.newAccEmail);
+         newaccname = view.findViewById(R.id.newAccName);
+         newaccemail = view.findViewById(R.id.newAccEmail);
         EditText newaccconpass = view.findViewById(R.id.newAccConfirmPass);
 
         // Set the EditTexts to single line
@@ -61,11 +63,11 @@ public class SignupFragment extends Fragment {
             }
         });
 
-// Get the EditText references
-        EditText newAccNameEditText = view.findViewById(R.id.newAccName);
-        EditText newAccEmailEditText = view.findViewById(R.id.newAccEmail);
-        EditText newAccPassEditText = view.findViewById(R.id.newAccPass);
-        EditText newAccConfirmPassEditText = view.findViewById(R.id.newAccConfirmPass);
+//// Get the EditText references
+//        EditText newAccNameEditText = view.findViewById(R.id.newAccName);
+//        EditText newAccEmailEditText = view.findViewById(R.id.newAccEmail);
+//        EditText newAccPassEditText = view.findViewById(R.id.newAccPass);
+//        EditText newAccConfirmPassEditText = view.findViewById(R.id.newAccConfirmPass);
 
 
 
@@ -79,24 +81,21 @@ public class SignupFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 FirebaseUtils fu = new FirebaseUtils();
-
-                if(newAccNameEditText.getText().toString().isEmpty() || newAccConfirmPassEditText.getText().toString().isEmpty() || newAccEmailEditText.getText().toString().isEmpty() || newAccEmailEditText.getText().toString().isEmpty() || newAccPassEditText.getText().toString().isEmpty()){
+                if(newaccname.getText().toString().isEmpty() || newaccconpass.getText().toString().isEmpty() || newaccemail.getText().toString().isEmpty() || newaccemail.getText().toString().isEmpty() || newaccpass.getText().toString().isEmpty()){
                     Toast.makeText(getContext(), "Please fill up all the fields.", Toast.LENGTH_SHORT).show();
                 } else {
-                    if (newAccPassEditText.getText().toString().equals(newAccConfirmPassEditText.getText().toString())) {
-                        fu.addAccount(newAccNameEditText.getText().toString(), newAccPassEditText.getText().toString(), "student", newAccEmailEditText.getText().toString(), db, getContext());
+                    if (newaccconpass.getText().toString().equals(newaccconpass.getText().toString())) {
+                        fu.addAccount(newaccname.getText().toString(), newaccpass.getText().toString(), "student", newaccemail.getText().toString(), db, getContext());
                         Toast.makeText(getContext(), "Account Created", Toast.LENGTH_SHORT).show();
-                        Intent i = new Intent(getContext(),HomePage.class);
-                        startActivity(i);
+                        SharedPrefUtils.forDataUsage(getContext(), newaccname.getText().toString(), newaccemail.getText().toString());
+                        startActivity(new Intent(getActivity(), HomePage.class).putExtra("user", SharedPrefUtils.returnEmailData(getContext())));
                         getActivity().finish();
                     } else {
                         Toast.makeText(getContext(), "Passwords dont match.", Toast.LENGTH_SHORT).show();
                     }
-
                 }
             }
         });
-
         return view;
     }
 
