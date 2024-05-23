@@ -60,7 +60,6 @@ dependencies {
     annotationProcessor("com.github.bumptech.glide:compiler:4.14.2")
     implementation("com.google.android.material:material:1.13.0-alpha01")
     implementation("com.google.firebase:firebase-auth:21.0.0")
-
-
+    implementation ("androidx.work:work-runtime:2.9.0")
 
 }

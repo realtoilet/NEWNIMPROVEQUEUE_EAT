@@ -5,6 +5,7 @@ import static com.example.queueeat.HomeFragment.user;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,11 +20,15 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
+import androidx.work.Data;
+import androidx.work.OneTimeWorkRequest;
 
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -33,6 +38,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
+import androidx.work.Data;
+import java.util.concurrent.TimeUnit;
 
 public class CartFragment extends Fragment {
     HomePage home;
@@ -167,7 +177,7 @@ public class CartFragment extends Fragment {
             List<ForOrderClass> f = new ArrayList<>();
             Map<String, Object> m = new HashMap<>();
 
-            for(ProductClass p : ListOfOrders.checkoutList){
+            for (ProductClass p : ListOfOrders.checkoutList) {
                 f.add(new ForOrderClass(p.getItemName(), p.getItemPrice(), p.getItemQuantity()));
             }
 
@@ -183,7 +193,7 @@ public class CartFragment extends Fragment {
                     m.put("queue", true);
                     m.put("timestamp", FieldValue.serverTimestamp());
                     FirebaseUtils.sendOrder(m, FirebaseFirestore.getInstance());
-                    Toast.makeText(home, "Thanks for ordering", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Thanks for ordering", Toast.LENGTH_SHORT).show();
                     // Clear the cart after placing the order
                     ListOfOrders.orderList.clear();
                     ListOfOrders.checkoutList.clear();
@@ -199,13 +209,28 @@ public class CartFragment extends Fragment {
                         }
                     }
                     HomePage.vp2.setCurrentItem(HomePage.vp2.getCurrentItem() - 1);
+
+                    // Schedule the timer
+                    long durationMillis = 40 * 60 * 1000; // 40 minutes
+                    long endTimeMillis = System.currentTimeMillis() + durationMillis;
+
+                    Data inputData = new Data.Builder()
+                            .putLong("endTimeMillis", endTimeMillis)
+                            .build();
+
+                    OneTimeWorkRequest timerWorkRequest = new OneTimeWorkRequest.Builder(TimerWorker.class)
+                            .setInputData(inputData)
+                            .setInitialDelay(durationMillis, TimeUnit.MILLISECONDS)
+                            .build();
+
+                    WorkManager.getInstance(getContext()).enqueue(timerWorkRequest);
+
                     d.dismiss();
-
                 }
-
             });
-
         });
+
+
     }
 
 

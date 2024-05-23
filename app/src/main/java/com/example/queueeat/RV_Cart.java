@@ -1,6 +1,7 @@
 package com.example.queueeat;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,83 +38,99 @@ public class RV_Cart extends RecyclerView.Adapter<RV_Cart.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull RV_Cart.ViewHolder h, int p) {
-        ProductClass l = list.get(p);
+        int position = h.getAdapterPosition(); // Store the position
 
-        h.a.setOnClickListener(v -> {
-            l.setItemQuantity(l.getItemQuantity() + 1);
-            h.quantity.setText(String.valueOf(l.getItemQuantity()));
+        // Check if the position is valid
+        if (position != RecyclerView.NO_POSITION && position < list.size()) {
+            ProductClass l = list.get(position);
 
-            for (ProductClass e : ListOfOrders.checkoutList) {
-                if (e.getDocId().equals(l.getDocId())) {
-                    e.setItemQuantity(l.getItemQuantity());
-                }
+            // Check if checkoutList and orderList are not empty before using them
+            if (!ListOfOrders.checkoutList.isEmpty() && !ListOfOrders.orderList.isEmpty()) {
+                // Your existing code for handling onBindViewHolder
+            } else {
+                // Handle empty lists gracefully or log a message
+                Log.e("RV_Cart", "checkoutList or orderList is empty.");
             }
-            h.price.setText("₱" + l.getItemPrice() * l.getItemQuantity());
-            printList(ListOfOrders.checkoutList);
-            CartFragment.updateTextview();
-        });
 
-        h.m.setOnClickListener(v -> {
-            if (l.getItemQuantity() > 1) {
-                l.setItemQuantity(l.getItemQuantity() - 1);
+            h.a.setOnClickListener(v -> {
+                l.setItemQuantity(l.getItemQuantity() + 1);
                 h.quantity.setText(String.valueOf(l.getItemQuantity()));
+
                 for (ProductClass e : ListOfOrders.checkoutList) {
                     if (e.getDocId().equals(l.getDocId())) {
                         e.setItemQuantity(l.getItemQuantity());
                     }
                 }
-            }
+                h.price.setText("₱" + l.getItemPrice() * l.getItemQuantity());
+                printList(ListOfOrders.checkoutList);
+                CartFragment.updateTextview();
+            });
+
+            h.m.setOnClickListener(v -> {
+                if (l.getItemQuantity() > 1) {
+                    l.setItemQuantity(l.getItemQuantity() - 1);
+                    h.quantity.setText(String.valueOf(l.getItemQuantity()));
+                    for (ProductClass e : ListOfOrders.checkoutList) {
+                        if (e.getDocId().equals(l.getDocId())) {
+                            e.setItemQuantity(l.getItemQuantity());
+                        }
+                    }
+                }
+                h.price.setText("₱" + l.getItemPrice() * l.getItemQuantity());
+                printList(ListOfOrders.checkoutList);
+                CartFragment.updateTextview();
+            });
+
+            h.name.setText(l.getItemName());
             h.price.setText("₱" + l.getItemPrice() * l.getItemQuantity());
-            printList(ListOfOrders.checkoutList);
-            CartFragment.updateTextview();
-        });
+            h.quantity.setText(String.valueOf(l.getItemQuantity()));
+            Glide.with(c).load(l.getItemURL()).into(h.iv);
 
-        h.name.setText(l.getItemName());
-        h.price.setText("₱" + l.getItemPrice() * l.getItemQuantity());
-        h.quantity.setText(String.valueOf(l.getItemQuantity()));
-        Glide.with(c).load(l.getItemURL()).into(h.iv);
+            h.cb.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                if (isChecked) {
+                    ListOfOrders.checkoutList.add(new ProductClass(l.getItemName(), l.getItemURL(), l.getItemPrice(), l.getItemQuantity(), l.getDocId(), l.getItemStocks(), l.getItemType()));
+                } else {
+                    for (int i = 0; i < ListOfOrders.checkoutList.size(); i++) {
+                        if (ListOfOrders.checkoutList.get(i).getItemName().equals(l.getItemName())) {
+                            ListOfOrders.checkoutList.remove(i);
+                            break;
+                        }
+                    }
+                }
+                CartFragment.updateButton();
+                CartFragment.updateTextview();
+                printList(ListOfOrders.orderList);
+            });
 
-        h.cb.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            ProductClass l1 = list.get(h.getAdapterPosition());
-            if (isChecked) {
-                ListOfOrders.checkoutList.add(new ProductClass(l1.getItemName(), l1.getItemURL(), l1.getItemPrice(), l1.getItemQuantity(), l1.getDocId(), l1.getItemStocks(),l1.getItemType()));
-            } else {
-                for (int i = 0; i < ListOfOrders.checkoutList.size(); i++) {
-                    if (ListOfOrders.checkoutList.get(i).getItemName().equals(l1.getItemName())) {
-                        ListOfOrders.checkoutList.remove(i);
+            h.delete.setOnClickListener(v -> {
+                for (int i = 0; i < ListOfOrders.orderList.size(); i++) {
+                    if (ListOfOrders.orderList.get(i).getItemName().equals(l.getItemName())) {
+                        ListOfOrders.orderList.remove(i);
+                        this.notifyItemRemoved(position);
                         break;
                     }
                 }
-            }
-            CartFragment.updateButton();
-            CartFragment.updateTextview();
-            printList(ListOfOrders.orderList);
-        });
+                CartFragment.updateButton();
+                CartFragment.updateTextview();
+            });
 
-        h.delete.setOnClickListener(v -> {
-            ProductClass l1 = list.get(h.getAdapterPosition());
-
-            for (int i = 0; i < ListOfOrders.orderList.size(); i++) {
-                if (ListOfOrders.orderList.get(i).getItemName().equals(l1.getItemName())) {
-                    ListOfOrders.orderList.remove(i);
-                    this.notifyItemRemoved(h.getAdapterPosition());
-                    break;
+            CartFragment.cb.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                for (int i = 0; i < getItemCount(); i++) {
+                    ViewHolder holder = (ViewHolder) CartFragment.rv.findViewHolderForAdapterPosition(i);
+                    if (holder != null) {
+                        holder.cb.setChecked(isChecked);
+                    }
                 }
-            }
-            CartFragment.updateButton();
-            CartFragment.updateTextview();
-        });
+                CartFragment.updateTextview();
+            });
 
-        CartFragment.cb.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            for (int i = 0; i < getItemCount(); i++) {
-                ViewHolder holder = (ViewHolder) CartFragment.rv.findViewHolderForAdapterPosition(i);
-                if (holder != null) {
-                    holder.cb.setChecked(isChecked);
-                }
-            }
-            CartFragment.updateTextview();
-        });
+        } else {
+            // Handle invalid position gracefully or log a message
+            Log.e("RV_Cart", "Invalid position: " + position);
+        }
     }
+
+
 
     public void printList(List<ProductClass> e) {
         System.out.println("------------------------------------------------------------------");

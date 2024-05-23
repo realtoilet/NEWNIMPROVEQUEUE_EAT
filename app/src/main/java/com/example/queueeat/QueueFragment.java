@@ -3,16 +3,23 @@ package com.example.queueeat;
 import android.app.Dialog;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.Observer;
+import androidx.work.WorkInfo;
+import androidx.work.WorkManager;
+import androidx.work.WorkQuery;
+import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-// Import FrameLayout
-import android.widget.FrameLayout;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 import com.example.queueeat.databinding.FragmentQueueBinding;
 import com.google.firebase.firestore.FirebaseFirestore;
+import java.util.concurrent.TimeUnit;
+
 
 public class QueueFragment extends Fragment {
 
@@ -22,6 +29,9 @@ public class QueueFragment extends Fragment {
     private String user;
     private TextView receiptUserName;
     private Dialog endTimerDialog; // Reference to hold the inflated dialog instance
+    private TextView timerTextView; // TextView to display the timer
+    private CountDownTimer countDownTimer;
+    private SharedViewModel sharedViewModel;
 
     // Constructor with user parameter
     public QueueFragment(String user) {
@@ -31,12 +41,15 @@ public class QueueFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        // Inflate the layout using data binding
         binding = FragmentQueueBinding.inflate(inflater, container, false);
-        queueNumber = binding.queueNumber; // Reference the text view directly
+        View rootView = binding.getRoot();
+        queueNumber = binding.queueNumber;
         firestore = FirebaseFirestore.getInstance();
         queueNumber.setText("");
 
-        // Example of using FirebaseUtils.getCurrentQueue
+        timerTextView = binding.timernabaog;
+
         FirebaseUtils.getCurrentQueue(FirebaseFirestore.getInstance(), user, queueNumber -> {
             Log.d("QueueFragment", "Current Queue Number: " + queueNumber);
             if (queueNumber != -1) {
@@ -48,15 +61,53 @@ public class QueueFragment extends Fragment {
 
         binding.receiptUserName.setText(SharedPrefUtils.returnUsernameForData(getContext()));
 
-        // Set click listener for endTimer text view (assuming it exists)
-        TextView endTimer = binding.endTimer; // Update with the actual ID of your endTimer text view
+        TextView endTimer = binding.endTimer;
         if (endTimer != null) {
             endTimer.setOnClickListener(v -> showEndTimerDialog());
         } else {
             Log.w("QueueFragment", "endTimer Text View not found!");
         }
 
-        return binding.getRoot();
+        // Observe timer status
+        WorkManager.getInstance(getContext())
+                .getWorkInfosByTagLiveData("timerWorkRequest")
+                .observe(getViewLifecycleOwner(), workInfos -> {
+                    if (workInfos == null || workInfos.isEmpty()) {
+                        return;
+                    }
+
+                    WorkInfo workInfo = workInfos.get(0);
+                    if (workInfo.getState().isFinished()) {
+                        timerTextView.setText("00:00");
+                    } else {
+                        long endTimeMillis = workInfo.getOutputData().getLong("endTimeMillis", 0);
+                        long remainingTimeMillis = endTimeMillis - System.currentTimeMillis();
+
+                        startCountdownTimer(remainingTimeMillis);
+                    }
+                });
+
+        return rootView;
+    }
+
+    public void startCountdownTimer(long durationInMillis) {
+        if (countDownTimer != null) {
+            countDownTimer.cancel();
+        }
+
+        countDownTimer = new CountDownTimer(durationInMillis, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                long minutes = TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished);
+                long seconds = TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) % 60;
+                timerTextView.setText(String.format("%02d:%02d", minutes, seconds));
+            }
+
+            @Override
+            public void onFinish() {
+                timerTextView.setText("00:00");
+            }
+        }.start();
     }
 
     private void showEndTimerDialog() {
@@ -87,3 +138,5 @@ public class QueueFragment extends Fragment {
         endTimerDialog.show(); // Show the inflated dialog
     }
 }
+
+
