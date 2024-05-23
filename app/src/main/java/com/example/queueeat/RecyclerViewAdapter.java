@@ -2,11 +2,13 @@ package com.example.queueeat;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -19,11 +21,14 @@ import com.bumptech.glide.Glide;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.Viewholder> {
+
+    private List<ProductClass> pFiltered; // Filtered list for search functionality
 
     private List<ProductClass> p;
     private Context c;
@@ -37,6 +42,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public RecyclerViewAdapter(List<ProductClass> p, Context c, String user) {
         this.user = user;
         this.p = p;
+        this.pFiltered = new ArrayList<>(p); // Initialize filtered list with all items
         this.c = c;
     }
 
@@ -53,10 +59,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     @Override
     public void onBindViewHolder(@NonNull Viewholder holder, @SuppressLint("RecyclerView") int position) {
-        ProductClass pcopy = p.get(position);
+        ProductClass pcopy = pFiltered.get(position); // Use filtered list
 
         Glide.with(c).load(pcopy.getItemURL()).into(holder.itemImage);
-
         holder.itemName.setText(pcopy.getItemName());
         holder.itemPrice.setText("₱" + pcopy.getItemPrice());
 
@@ -128,7 +133,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     @Override
     public int getItemCount() {
-        return p.size();
+        return pFiltered.size(); // Return size of filtered list
     }
 
     public class Viewholder extends RecyclerView.ViewHolder {
@@ -152,6 +157,36 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             fakeBtn = itemView.findViewById(R.id.fake_add_button);
             btn_addToServings = itemView.findViewById(R.id.btn_addToServings);
         }
+    }
+
+
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+                String filterPattern = constraint.toString().toLowerCase().trim();
+                List<ProductClass> filteredList = new ArrayList<>();
+                if (TextUtils.isEmpty(filterPattern)) {
+                    filteredList.addAll(p);
+                } else {
+                    for (ProductClass item : p) {
+                        if (item.getItemName().toLowerCase().contains(filterPattern)) {
+                            filteredList.add(item);
+                        }
+                    }
+                }
+                FilterResults results = new FilterResults();
+                results.values = filteredList;
+                return results;
+            }
+
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+                pFiltered.clear();
+                pFiltered.addAll((List<ProductClass>) results.values);
+                notifyDataSetChanged();
+            }
+        };
     }
 
     public void setInterface(CheckForNewData check) {

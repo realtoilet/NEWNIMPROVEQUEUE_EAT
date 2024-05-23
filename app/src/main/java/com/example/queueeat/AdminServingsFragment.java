@@ -1,45 +1,31 @@
 package com.example.queueeat;
 
-import android.app.Dialog;
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.PickVisualMediaRequest;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.view.Gravity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.EditText;
 
-import com.google.android.gms.auth.api.signin.internal.Storage;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
-import de.hdodenhof.circleimageview.CircleImageView;
 
 public class AdminServingsFragment extends Fragment {
 
-    List<StockClass> stocks;
+    static List<StockClass> stocks = new ArrayList<>();
+    static List<StockClass> filteredStocks = new ArrayList<>();
     static RecyclerView rv;
-
+    static StocksAdapter adapter;
+    EditText searchEditText;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -50,15 +36,47 @@ public class AdminServingsFragment extends Fragment {
         rv = v.findViewById(R.id.rv);
         rv.setLayoutManager(new LinearLayoutManager(getContext()));
 
+        searchEditText = v.findViewById(R.id.searchUserEditText);
         FirebaseUtils.retrieveAllServings(FirebaseFirestore.getInstance(), getContext());
+
+        searchEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                filter(charSequence.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+            }
+        });
 
         return v;
     }
 
-
-
-
     public static void addToRecyclerview(List<StockClass> s, Context c){
-        rv.setAdapter(new StocksAdapter(s, c));
+        stocks.clear();
+        stocks.addAll(s);
+        filteredStocks.clear();
+        filteredStocks.addAll(s);
+        adapter = new StocksAdapter(filteredStocks, c);
+        rv.setAdapter(adapter);
+    }
+
+    private void filter(String text) {
+        filteredStocks.clear();
+        if (text.isEmpty()) {
+            filteredStocks.addAll(stocks);
+        } else {
+            for (StockClass stock : stocks) {
+                if (stock.getName().toLowerCase().contains(text.toLowerCase())) {
+                    filteredStocks.add(stock);
+                }
+            }
+        }
+        adapter.notifyDataSetChanged();
     }
 }

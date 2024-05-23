@@ -43,4 +43,10 @@
 
 
 
+    <style name="stayNigga2" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="android:textCursorDrawable">@drawable/cursor_color</item>
+    </style>
+
+
+
 </resources>

@@ -9,16 +9,18 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
-
+import android.text.Editable;
 import android.util.Log;
 import android.widget.SearchView;
 import android.widget.TextView;
@@ -39,14 +41,13 @@ public class HomeFragment extends Fragment {
     }
 
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-
-
 
         FirebaseUtils.retrieveAllProducts(FirebaseFirestore.getInstance(), getContext());
 
@@ -56,40 +57,53 @@ public class HomeFragment extends Fragment {
         homeusername = view.findViewById(R.id.HomeUsername);
         a = view.findViewById(R.id.fakeButton_Snacks);
         b = view.findViewById(R.id.fakeButton_meals);
+        EditText editTextSearch = view.findViewById(R.id.searchUserEditText);
 
         // Set the initial state: meals button selected
         setColors((LinearLayout) b, true, R.id.mealsicon, R.id.tv_meals);
         setColors((LinearLayout) a, false, R.id.Snacks, R.id.tv_snacks);
 
+        // Set OnClickListener for Snacks button
         a.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 a.setEnabled(false);
                 b.setEnabled(true);
-
-                // Set the selected state for fakeButton_Snacks
                 setColors((LinearLayout) a, true, R.id.Snacks, R.id.tv_snacks);
-
-                // Reset the state for fakeButton_meals
                 setColors((LinearLayout) b, false, R.id.mealsicon, R.id.tv_meals);
-
                 FirebaseUtils.filterAllProducts(FirebaseFirestore.getInstance(), getContext(), "Snacks");
             }
         });
 
+        // Set OnClickListener for Meals button
         b.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 b.setEnabled(false);
                 a.setEnabled(true);
-
-                // Set the selected state for fakeButton_meals
                 setColors((LinearLayout) b, true, R.id.mealsicon, R.id.tv_meals);
-
-                // Reset the state for fakeButton_Snacks
                 setColors((LinearLayout) a, false, R.id.Snacks, R.id.tv_snacks);
-
                 FirebaseUtils.filterAllProducts(FirebaseFirestore.getInstance(), getContext(), "Meals");
+            }
+        });
+
+        // Set TextChangedListener for EditText
+        editTextSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // Perform filtering based on search query
+                RecyclerViewAdapter adapter = (RecyclerViewAdapter) recyclerView.getAdapter();
+                if (adapter != null) {
+                    adapter.getFilter().filter(s);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
             }
         });
 
@@ -97,6 +111,7 @@ public class HomeFragment extends Fragment {
         user = SharedPrefUtils.returnUsernameForData(getContext());
         return view;
     }
+
 
     private void setColors(LinearLayout layout, boolean selected, int imageViewId, int textViewId) {
         ImageView imageView = layout.findViewById(imageViewId);

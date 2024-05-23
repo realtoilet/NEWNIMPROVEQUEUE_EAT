@@ -28,7 +28,7 @@
 
 
     <EditText
-        android:id="@+id/search"
+        android:id="@+id/searchUserEditText"
         android:layout_width="350dp"
         android:layout_height="55dp"
         android:layout_below="@id/header_shape"
@@ -56,7 +56,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:id="@+id/button_group"
-        android:layout_below="@+id/search"
+        android:layout_below="@+id/searchUserEditText"
         android:layout_marginTop="25dp"
         android:layout_centerHorizontal="true"
         android:gravity="center"
