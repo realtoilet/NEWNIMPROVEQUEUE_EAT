@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -36,7 +37,7 @@ import java.util.Objects;
 public class CartFragment extends Fragment {
     HomePage home;
     static RecyclerView rv;
-    RV_Cart adapter;
+    static RV_Cart adapter;
     List<ProductClass> list;
     static Button btn_popup;
     static CheckBox cb;
@@ -45,6 +46,8 @@ public class CartFragment extends Fragment {
     // List to hold child fragments
     private List<Fragment> childFragments;
     int docSize = 0;
+
+    ImageButton btn_delete;
     QueueFragment queueFragment = new QueueFragment(user);
 
     @Override
@@ -53,11 +56,57 @@ public class CartFragment extends Fragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_cart, container, false);
 
+        btn_delete = v.findViewById(R.id.delete);
         btn_popup = v.findViewById(R.id.btn_checkout);
         cb = v.findViewById(R.id.cb);
         price = v.findViewById(R.id.amount_total);
         price.setText("0");
         home = (HomePage) getActivity();
+
+        btn_delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                boolean isAnyChecked = false;
+
+                // Check if any CheckBox is checked
+                for (int i = 0; i < rv.getChildCount(); i++) {
+                    View view = rv.getChildAt(i);
+                    CheckBox cb = view.findViewById(R.id.cb);
+                    if (cb != null && cb.isChecked()) {
+                        isAnyChecked = true;
+                        break;
+                    }
+                }
+
+                if (isAnyChecked) {
+                    // Uncheck all checkboxes
+                    for (int i = 0; i < rv.getChildCount(); i++) {
+                        View view = rv.getChildAt(i);
+                        CheckBox cb = view.findViewById(R.id.cb);
+                        if (cb != null) {
+                            cb.setChecked(false);
+                        }
+                    }
+
+                    // Clear the cart lists
+                    ListOfOrders.orderList.clear();
+                    ListOfOrders.checkoutList.clear();
+
+                    // Notify the adapter after all items are cleared and unchecked
+                    adapter.notifyDataSetChanged();
+
+                    // Update the UI
+                    CartFragment.updateButton();
+                    CartFragment.updateTextview();
+
+                    cb.setChecked(false);
+                }
+            }
+        });
+
+
+
+
         btn_popup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -135,10 +184,22 @@ public class CartFragment extends Fragment {
                     m.put("timestamp", FieldValue.serverTimestamp());
                     FirebaseUtils.sendOrder(m, FirebaseFirestore.getInstance());
                     Toast.makeText(home, "Thanks for ordering", Toast.LENGTH_SHORT).show();
+                    // Clear the cart after placing the order
+                    ListOfOrders.orderList.clear();
+                    ListOfOrders.checkoutList.clear();
+                    adapter.notifyDataSetChanged();
+                    updateButton();
+                    updateTextview();
+                    // Uncheck all checkboxes
+                    for (int i = 0; i < rv.getChildCount(); i++) {
+                        View view = rv.getChildAt(i);
+                        CheckBox cb = view.findViewById(R.id.cb);
+                        if (cb != null) {
+                            cb.setChecked(false);
+                        }
+                    }
                     HomePage.vp2.setCurrentItem(HomePage.vp2.getCurrentItem() - 1);
                     d.dismiss();
-
-
 
                 }
 

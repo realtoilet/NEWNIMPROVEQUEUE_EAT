@@ -46,14 +46,31 @@ public class UserFragment extends Fragment {
         logoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Navigate to SignInActivity
-                Intent intent = new Intent(getActivity(), SigninPage.class);
-                startActivity(intent);
+                // Check if the cart is not empty
+                if (!ListOfOrders.orderList.isEmpty()) {
+                    // Clear the cart lists
+                    ListOfOrders.orderList.clear();
+                    ListOfOrders.checkoutList.clear();
+
+                    // Notify the adapter if it exists
+                    if (CartFragment.adapter != null) {
+                        CartFragment.adapter.notifyDataSetChanged();
+                    }
+
+                    // Update the UI if the CartFragment is active
+                    CartFragment.updateButton();
+                    CartFragment.updateTextview();
+                }
 
                 // Perform logout
                 SharedPrefUtils.logout(getContext());
+
+                // Navigate to SignInActivity
+                Intent intent = new Intent(getActivity(), SigninPage.class);
+                startActivity(intent);
             }
         });
+
 
         // Get the current user from Firebase Authentication
 
