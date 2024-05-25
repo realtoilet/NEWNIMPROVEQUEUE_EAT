@@ -39,9 +39,8 @@ android {
         enable = true
     }
 }
-
 dependencies {
-
+    implementation("com.google.guava:guava:30.1.1-android")
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)
