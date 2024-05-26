@@ -1,6 +1,7 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="295dp"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="295dp"
     app:cardCornerRadius="5dp"
     android:layout_margin="10dp"
@@ -8,8 +9,10 @@
     app:cardElevation="0dp">
 
     <FrameLayout
+        android:layout_gravity="center_horizontal"
         android:id="@+id/fl_bg"
-        android:layout_width="match_parent"
+        android:layout_width="295dp"
+        android:layout_marginEnd="10dp"
         android:layout_height="match_parent">
 
         <RelativeLayout
@@ -58,20 +61,62 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <TextView
-                    android:id="@+id/itemName"
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="150dp"
                     android:layout_height="90dp"
                     android:layout_alignParentBottom="true"
+                    android:layout_marginLeft="29.7dp"
                     android:background="@drawable/bg_card_name"
-                    android:fontFamily="@font/montserrat"
-                    android:padding="10dp"
-                    android:text="Sisigg"
-                    android:textStyle="bold"
-                    android:textColor="@color/white"
-                    android:textSize="30sp"
-                    android:gravity="center"
-                    android:layout_marginLeft="29.7dp"/>
+                    android:padding="10dp">
+
+                    <TextView
+                        android:id="@+id/itemName"
+                        android:layout_height="0dp"
+                        android:layout_width="0dp"
+                        android:fontFamily="@font/montserrat"
+                        android:gravity="center"
+                        android:text="Sisigg"
+                        android:textColor="@color/white"
+                        android:autoSizeTextType="uniform"
+                        android:autoSizeMinTextSize="9sp"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toTopOf="@+id/guideline10"
+                        app:layout_constraintEnd_toStartOf="@+id/guideline9"
+                        app:layout_constraintStart_toStartOf="@+id/guideline8"
+                        app:layout_constraintTop_toTopOf="@+id/guideline11" />
+
+                    <androidx.constraintlayout.widget.Guideline
+                        android:id="@+id/guideline8"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        app:layout_constraintGuide_percent="0.05" />
+
+                    <androidx.constraintlayout.widget.Guideline
+                        android:id="@+id/guideline9"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        app:layout_constraintGuide_percent="0.97" />
+
+                    <androidx.constraintlayout.widget.Guideline
+                        android:id="@+id/guideline10"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        app:layout_constraintGuide_percent="0.94" />
+
+                    <androidx.constraintlayout.widget.Guideline
+                        android:id="@+id/guideline11"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        app:layout_constraintGuide_percent="0.11" />
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 
                 <FrameLayout
                     android:id="@+id/btn_AddToCart"

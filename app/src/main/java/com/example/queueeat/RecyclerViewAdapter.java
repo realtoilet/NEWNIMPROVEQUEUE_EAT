@@ -65,35 +65,35 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         holder.itemName.setText(pcopy.getItemName());
         holder.itemPrice.setText("₱" + pcopy.getItemPrice());
 
-        // Adjust text size for itemName if it exceeds 6 characters
-        if (holder.itemName.getText().length() > 4) {
-            int originalTextSizeSp = (int) (holder.itemName.getTextSize() / holder.itemName.getResources().getDisplayMetrics().scaledDensity);
-            int excessCharacters = holder.itemName.getText().length() - 4;
-            int newTextSizeSp = originalTextSizeSp - (3 * excessCharacters);
-
-            if (newTextSizeSp < 23) {
-                newTextSizeSp = 23; // Ensure the text size does not go below 23sp
-            }
-
-            holder.itemName.setTextSize(TypedValue.COMPLEX_UNIT_SP, newTextSizeSp);
-        }
-
-        // Measure the text width for itemPrice and adjust the text size if it exceeds 100dp
-        holder.itemPrice.post(() -> {
-            DisplayMetrics metrics = holder.itemPrice.getContext().getResources().getDisplayMetrics();
-            float maxTextWidth = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 80, metrics);
-
-            holder.itemPrice.measure(0, 0);
-            float textWidth = holder.itemPrice.getMeasuredWidth();
-
-            if (textWidth > maxTextWidth) {
-                int originalTextSizeSp = (int) (holder.itemPrice.getTextSize() / metrics.scaledDensity);
-                int excessCharacters = (int) ((textWidth - maxTextWidth) / (textWidth / holder.itemPrice.getText().length()));
-                int newTextSizeSp = originalTextSizeSp - (2 * excessCharacters);
-
-                holder.itemPrice.setTextSize(TypedValue.COMPLEX_UNIT_SP, newTextSizeSp);
-            }
-        });
+//        // Adjust text size for itemName if it exceeds 6 characters
+//        if (holder.itemName.getText().length() > 4) {
+//            int originalTextSizeSp = (int) (holder.itemName.getTextSize() / holder.itemName.getResources().getDisplayMetrics().scaledDensity);
+//            int excessCharacters = holder.itemName.getText().length() - 4;
+//            int newTextSizeSp = originalTextSizeSp - (3 * excessCharacters);
+//
+//            if (newTextSizeSp < 23) {
+//                newTextSizeSp = 23; // Ensure the text size does not go below 23sp
+//            }
+//
+//            holder.itemName.setTextSize(TypedValue.COMPLEX_UNIT_SP, newTextSizeSp);
+//        }
+//
+//        // Measure the text width for itemPrice and adjust the text size if it exceeds 100dp
+//        holder.itemPrice.post(() -> {
+//            DisplayMetrics metrics = holder.itemPrice.getContext().getResources().getDisplayMetrics();
+//            float maxTextWidth = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 80, metrics);
+//
+//            holder.itemPrice.measure(0, 0);
+//            float textWidth = holder.itemPrice.getMeasuredWidth();
+//
+//            if (textWidth > maxTextWidth) {
+//                int originalTextSizeSp = (int) (holder.itemPrice.getTextSize() / metrics.scaledDensity);
+//                int excessCharacters = (int) ((textWidth - maxTextWidth) / (textWidth / holder.itemPrice.getText().length()));
+//                int newTextSizeSp = originalTextSizeSp - (2 * excessCharacters);
+//
+//                holder.itemPrice.setTextSize(TypedValue.COMPLEX_UNIT_SP, newTextSizeSp);
+//            }
+//        });
 
         holder.fakeBtn.setOnClickListener(v -> FirebaseUtils.checkIfOrdered(FirebaseFirestore.getInstance(), user, new FirebaseUtils.CheckForUserOrderListener() {
             @Override

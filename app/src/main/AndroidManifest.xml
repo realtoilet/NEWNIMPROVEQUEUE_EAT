@@ -15,29 +15,31 @@
         android:theme="@style/Theme.QUEUEEAT"
         tools:targetApi="31">
         <activity
+            android:name=".OwnTimerActivity"
+            android:exported="false" />
+        <activity
             android:name=".SeatsPopup"
             android:exported="false" />
         <activity
             android:name=".AdminHomePage"
             android:exported="false"
-            android:windowSoftInputMode="adjustNothing"
             android:screenOrientation="portrait"
-           />
+            android:windowSoftInputMode="adjustNothing" />
         <activity
             android:name=".SigninPage"
             android:exported="false"
-            android:windowSoftInputMode="adjustNothing"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustNothing" />
         <activity
             android:name=".HomePage"
             android:exported="false"
-            android:windowSoftInputMode="adjustNothing"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustNothing" />
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:theme="@style/MyTheme.Splash"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/MyTheme.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VEIW" />

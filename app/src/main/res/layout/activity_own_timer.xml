@@ -2,20 +2,32 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".HomeFragment">
-
+    tools:context=".OwnTimerActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".HomeFragment">
 
+
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="95dp"
             android:background="@drawable/roundedrectangle2">
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@android:color/transparent"
+                android:src="@drawable/wwww"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/guideline18"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -23,26 +35,59 @@
                 android:layout_alignParentStart="true"
                 android:layout_centerInParent="true"
                 android:letterSpacing="0.05"
-                android:text="Queue"
+                android:text="Own Meal"
                 android:textColor="@color/white"
                 android:textSize="35sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/guideline"
-                app:layout_constraintHorizontal_bias="0.353"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/guideline18"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.constraintlayout.widget.Barrier
+                android:id="@+id/barrier"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:barrierDirection="left" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.77" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline15"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.1" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline18"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.2214112" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="180dp"
+            android:layout_marginTop="310px">
+
 
             <RelativeLayout
                 android:layout_width="0dp"
-                android:layout_height="55dp"
+                android:layout_height="match_parent"
                 android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
                 android:background="@drawable/bg_timer"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/guideline"
-                app:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintEnd_toStartOf="@+id/guideline13"
+                app:layout_constraintStart_toStartOf="@+id/guideline12"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.503">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -57,7 +102,7 @@
                     android:text="TIMER"
                     android:textAlignment="center"
                     android:textColor="@color/white"
-                    android:textSize="10sp" />
+                    android:textSize="25sp" />
 
                 <TextView
                     android:id="@+id/endTimer"
@@ -74,66 +119,49 @@
                     android:text="END"
                     android:textAlignment="center"
                     android:textColor="@color/white"
-                    android:textSize="10sp" />
+                    android:textSize="25sp" />
 
                 <TextView
                     android:id="@+id/timernabaog"
                     style="@style/stayNigga"
-                    android:layout_width="150dp"
-                    android:layout_height="20dp"
+                    android:layout_width="300dp"
+                    android:layout_height="110dp"
                     android:layout_alignParentBottom="true"
                     android:layout_centerHorizontal="true"
                     android:layout_marginBottom="5dp"
                     android:background="@drawable/bg_timertimer"
                     android:fontFamily="@font/montserrat"
+                    android:gravity="center"
                     android:text="00:00"
                     android:textAlignment="center"
-                    android:textColor="@color/black" />
+                    android:textColor="@color/black"
+                    android:textSize="50dp" />
 
             </RelativeLayout>
 
-            <androidx.constraintlayout.widget.Barrier
-                android:id="@+id/barrier"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:barrierDirection="left" />
-
             <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guideline"
+                android:id="@+id/guideline12"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.55" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                app:layout_constraintGuide_percent="0.05" />
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="310px">
-
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:layout_width="200dp"
-                android:layout_height="200dp"
-                android:layout_centerInParent="true"
-                android:src="@color/cyan" />
-
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:layout_width="170dp"
-                android:layout_height="170dp"
-                android:layout_centerInParent="true"
-                android:src="@color/white" />
-
-            <TextView
-                android:id="@+id/queueNumber"
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline13"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:fontFamily="@font/montserrat"
-                android:text="12"
-                android:textColor="@color/black"
-                android:textSize="100sp"
-                android:textStyle="bold" />
-        </RelativeLayout>
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.91727495" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline17"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_begin="20dp" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <ir.beigirad.zigzagview.ZigzagView
             android:layout_width="300dp"
@@ -181,6 +209,7 @@
                 android:textColor="@color/black" />
 
             <ImageView
+                android:id="@+id/linedown"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:src="@color/black"
@@ -220,15 +249,47 @@
                 android:layout_marginEnd="15dp"
                 android:textColor="@color/grey" />
 
+            <TextView
+                android:layout_below="@+id/linedown"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/montserrat"
+                android:textSize="18sp"
+                android:textAlignment="center"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:text="Own\n Meal"
+                android:textColor="@color/grey" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:layout_width="300dp"
-                android:layout_height="268dp"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"
-                android:background="@color/white_cards_bg" />
+            <TextView
+                android:layout_below="@+id/linedown"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/montserrat"
+                android:textSize="18sp"
+                android:textAlignment="center"
+                android:layout_marginStart="134dp"
+                android:layout_marginTop="10dp"
+                android:text="N/A"
+                android:textColor="@color/grey" />
+
+            <TextView
+                android:layout_below="@+id/linedown"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/montserrat"
+                android:textSize="18sp"
+                android:layout_alignParentEnd="true"
+                android:textAlignment="center"
+                android:layout_marginEnd="30dp"
+                android:layout_marginTop="10dp"
+                android:text="N/A"
+                android:textColor="@color/grey" />
+
+
         </RelativeLayout>
 
 
     </RelativeLayout>
+
 </FrameLayout>
