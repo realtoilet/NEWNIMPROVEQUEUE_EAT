@@ -12,6 +12,7 @@ import androidx.core.content.ContextCompat;
 import androidx.core.widget.CompoundButtonCompat;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
@@ -25,6 +26,7 @@ import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.firestore.WriteBatch;
 import com.google.firebase.storage.StorageReference;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -51,7 +53,9 @@ public class FirebaseUtils {
         void currentQueue(int queue);
     }
 
-
+    public interface GetAllSalesFromTimeStamp{
+        void getSales(double sales, int orderscount);
+    }
 
 
 
@@ -166,14 +170,13 @@ public class FirebaseUtils {
     }
 
     public static void addAllSeats(FirebaseFirestore d) {
-        // Only use this to clear Firestore's seat collection
         for (int i = 1; i <= 64; i++) {
             DocumentReference ref = d.collection("SEATS").document("seat_" + i);
             Map<String, Object> m = new HashMap<>();
             m.put("seatNumber", i);
             m.put("isTaken", false);
             m.put("userSeating", "none");
-            ref.set(m, SetOptions.merge());
+            ref.update("isTaken", false);
         }
     }
 
@@ -203,6 +206,18 @@ public class FirebaseUtils {
                         }
                     }
                 });
+
+
+    }
+
+    public static void uncheckButtonOnceTimerIsDone(int currSeat, View v){
+        if(v!=null){
+            CheckBox c = v.findViewById(v.getResources().getIdentifier("checkBox" + currSeat, "id", v.getContext().getPackageName()));
+
+            if(c!=null){
+                c.setChecked(false);
+            }
+        }
     }
 
     public static void sendOrder(Map<String, Object> m, FirebaseFirestore f) {
@@ -333,6 +348,39 @@ public class FirebaseUtils {
                                     }
                                 });
                     }
+                });
+    }
+
+    public static void getAllSales(FirebaseFirestore f, GetAllSalesFromTimeStamp sales){
+        Timestamp start = DateUtils.getStartOfDay(2024, Calendar.MAY, Calendar.getInstance().get(Calendar.DAY_OF_MONTH) +1);
+        Timestamp end = DateUtils.getEndOfDay(2024, Calendar.MAY, Calendar.getInstance().get(Calendar.DAY_OF_MONTH) +1);
+        f.collection("ORDERS")
+                .whereGreaterThanOrEqualTo("timestamp", start)
+                .whereLessThanOrEqualTo("timestamp", end)
+                .addSnapshotListener((snap, e)->{
+                    if(e != null) return;
+                    List<ForOrderClass> order = new ArrayList<>();
+                    for(DocumentChange dc : snap.getDocumentChanges()){
+                        DocumentSnapshot doc = dc.getDocument();
+                        List<Map<String, Object>> orderList = (List<Map<String, Object>>) doc.get("orderList");
+
+                        if (orderList != null) {
+                            for (Map<String, Object> map : orderList) {
+                                String itemName = (String) map.get("itemName");
+                                Double itemPrice = (Double) map.get("itemPrice");
+                                Long itemQuantity = (Long) map.get("itemQuantity");
+
+                                order.add(new ForOrderClass(itemName, itemPrice, itemQuantity.intValue()));
+                            }
+                        }
+
+                    }
+                    double totalSales = 0;
+                    for (ForOrderClass orders : order){
+                        totalSales += orders.getItemPrice() * orders.getItemQuantity();
+                    }
+
+                    sales.getSales(totalSales, snap.size());
                 });
     }
 }

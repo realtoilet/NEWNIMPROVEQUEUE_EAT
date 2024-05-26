@@ -83,7 +83,7 @@ public class LoginFragment extends Fragment {
                                     if (username.equals("admin") && password.equals("admin123")) {
                                         SharedPrefUtils.forDataUsage(getContext(), username, email);
                                         startActivity(new Intent(getActivity(), AdminHomePage.class)
-                                                .putExtra("user", SharedPrefUtils.returnEmailData(getContext()))
+                                                .putExtra("user", SharedPrefUtils.returnUsernameForData(getContext()))
                                                 .putExtra("email", email));
                                         if (rememberMeCheckBox.isChecked()) {
                                             SharedPrefUtils.saveAccount(getContext(), username, password, "admin", email);
@@ -96,7 +96,7 @@ public class LoginFragment extends Fragment {
                                                 if (result) {
                                                     SharedPrefUtils.forDataUsage(getContext(), username, email);
                                                     startActivity(new Intent(getActivity(), HomePage.class)
-                                                            .putExtra("user", SharedPrefUtils.returnEmailData(getContext()))
+                                                            .putExtra("user", SharedPrefUtils.returnUsernameForData(getContext()))
                                                             .putExtra("email", email));
                                                     if (rememberMeCheckBox.isChecked()) {
                                                         SharedPrefUtils.saveAccount(getContext(), username, password, "buyer", email);

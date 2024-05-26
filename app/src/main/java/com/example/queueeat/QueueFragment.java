@@ -16,6 +16,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.example.queueeat.databinding.FragmentQueueBinding;
 import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.concurrent.TimeUnit;
@@ -44,19 +46,13 @@ public class QueueFragment extends Fragment {
         // Inflate the layout using data binding
         binding = FragmentQueueBinding.inflate(inflater, container, false);
         View rootView = binding.getRoot();
-        queueNumber = binding.queueNumber;
         firestore = FirebaseFirestore.getInstance();
-        queueNumber.setText("");
-
+        binding.queueNumber.setText("");
+        Toast.makeText(getContext(), user   , Toast.LENGTH_SHORT).show();
         timerTextView = binding.timernabaog;
 
         FirebaseUtils.getCurrentQueue(FirebaseFirestore.getInstance(), user, queueNumber -> {
-            Log.d("QueueFragment", "Current Queue Number: " + queueNumber);
-            if (queueNumber != -1) {
-                this.queueNumber.setText(String.valueOf(queueNumber));
-            } else {
-                this.queueNumber.setText("0");
-            }
+            binding.queueNumber.setText(queueNumber + "");
         });
 
         binding.receiptUserName.setText(SharedPrefUtils.returnUsernameForData(getContext()));

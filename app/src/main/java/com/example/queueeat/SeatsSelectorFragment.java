@@ -72,7 +72,9 @@ public class SeatsSelectorFragment extends Fragment {
         ListOfOrders.checkboxlist.addAll(checkBoxList);
     }
 
-
+    public void uncheckSeat(){
+        FirebaseUtils.uncheckButtonOnceTimerIsDone(ListOfOrders.currSeat, this.getView());
+    }
     // Method to attach listener to checkboxes
     private void attachCheckBoxListener() {
         CompoundButton.OnCheckedChangeListener checkBoxListener = new CompoundButton.OnCheckedChangeListener() {
