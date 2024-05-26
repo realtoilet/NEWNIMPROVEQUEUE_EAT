@@ -19,6 +19,7 @@ public class Seats_Selector_EFragment extends Fragment {
 
     private List<CheckBox> checkBoxList = new ArrayList<>();
     int currSeat;
+    static View v;
     public Seats_Selector_EFragment() {
         // Required empty public constructor
     }
@@ -26,7 +27,7 @@ public class Seats_Selector_EFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_seats__selector__e, container, false);
+         v = inflater.inflate(R.layout.fragment_seats__selector__e, container, false);
 
         // Populate checkbox list
         populateCheckBoxList(v);
@@ -53,7 +54,9 @@ public class Seats_Selector_EFragment extends Fragment {
         FirebaseUtils.setDataToButtons(FirebaseFirestore.getInstance(), 33, 40, v);
         return v;
     }
-
+    public static void uncheckSeat(){
+        FirebaseUtils.uncheckButtonOnceTimerIsDone(FirebaseFirestore.getInstance(), ListOfOrders.currSeat, v);
+    }
     // Method to populate the checkbox list
     private void populateCheckBoxList(View rootView) {
         checkBoxList.clear(); // Clear previous entries if any

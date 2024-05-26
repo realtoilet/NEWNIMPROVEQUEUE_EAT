@@ -10,6 +10,7 @@ import androidx.work.WorkManager;
 import androidx.work.WorkQuery;
 import android.os.CountDownTimer;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,11 +30,13 @@ public class QueueFragment extends Fragment {
     private TextView queueNumber;
     private FragmentQueueBinding binding;
     private String user;
+    CountDownTimer timer;
     private TextView receiptUserName;
     private Dialog endTimerDialog; // Reference to hold the inflated dialog instance
     private TextView timerTextView; // TextView to display the timer
     private CountDownTimer countDownTimer;
     private SharedViewModel sharedViewModel;
+    long timeLeftInMillis = 6000;//1200000;
 
     // Constructor with user parameter
     public QueueFragment(String user) {
@@ -48,40 +51,24 @@ public class QueueFragment extends Fragment {
         View rootView = binding.getRoot();
         firestore = FirebaseFirestore.getInstance();
         binding.queueNumber.setText("");
-        Toast.makeText(getContext(), user   , Toast.LENGTH_SHORT).show();
-        timerTextView = binding.timernabaog;
 
-        FirebaseUtils.getCurrentQueue(FirebaseFirestore.getInstance(), user, queueNumber -> {
-            binding.queueNumber.setText(queueNumber + "");
+
+        FirebaseUtils.getCurrentQueue(FirebaseFirestore.getInstance(), user, (queueNumber, list) -> {
+            if (queueNumber == -1) {
+                binding.queueNumber.setTextSize(TypedValue.COMPLEX_UNIT_SP, 40);
+                binding.queueNumber.setText("DONE");
+                Toast.makeText(getContext(), "Queue is done", Toast.LENGTH_SHORT).show();
+                startTimer();
+            } else if (queueNumber == -2) {
+                binding.queueNumber.setTextSize(TypedValue.COMPLEX_UNIT_SP, 40);
+                binding.queueNumber.setText("NONE");
+            } else {
+                binding.queueNumber.setTextSize(TypedValue.COMPLEX_UNIT_SP, 100);
+                binding.queueNumber.setText(String.valueOf(queueNumber));
+            }
         });
 
         binding.receiptUserName.setText(SharedPrefUtils.returnUsernameForData(getContext()));
-
-        TextView endTimer = binding.endTimer;
-        if (endTimer != null) {
-            endTimer.setOnClickListener(v -> showEndTimerDialog());
-        } else {
-            Log.w("QueueFragment", "endTimer Text View not found!");
-        }
-
-        // Observe timer status
-        WorkManager.getInstance(getContext())
-                .getWorkInfosByTagLiveData("timerWorkRequest")
-                .observe(getViewLifecycleOwner(), workInfos -> {
-                    if (workInfos == null || workInfos.isEmpty()) {
-                        return;
-                    }
-
-                    WorkInfo workInfo = workInfos.get(0);
-                    if (workInfo.getState().isFinished()) {
-                        timerTextView.setText("00:00");
-                    } else {
-                        long endTimeMillis = workInfo.getOutputData().getLong("endTimeMillis", 0);
-                        long remainingTimeMillis = endTimeMillis - System.currentTimeMillis();
-
-                        startCountdownTimer(remainingTimeMillis);
-                    }
-                });
 
         return rootView;
     }
@@ -132,6 +119,37 @@ public class QueueFragment extends Fragment {
         endTimerDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         endTimerDialog.getWindow().setGravity(Gravity.CENTER);
         endTimerDialog.show(); // Show the inflated dialog
+    }
+
+    private void startTimer() {
+        countDownTimer = new CountDownTimer(timeLeftInMillis, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                timeLeftInMillis = millisUntilFinished;
+                updateTimer();
+            }
+
+            @Override
+            public void onFinish() {
+                binding.timernabaog.setText("00:00");
+                SeatsSelectorFragment.uncheckSeat();
+                SeatsSelector_BFragment.uncheckSeat();
+                Seats_Selector_CFragment.uncheckSeat();
+                Seats_Selector_DFragment.uncheckSeat();
+                Seats_Selector_EFragment.uncheckSeat();
+                Seats_Selector_FFragment.uncheckSeat();
+                Seats_Selector_GFragment.uncheckSeat();
+                Seats_Selector_HFragment.uncheckSeat();
+            }
+        }.start();
+    }
+
+    private void updateTimer() {
+        int minutes = (int) (timeLeftInMillis / 1000) / 60;
+        int seconds = (int) (timeLeftInMillis / 1000) % 60;
+
+        String timeLeftFormatted = String.format("%02d:%02d", minutes, seconds);
+        binding.timernabaog.setText(timeLeftFormatted);
     }
 }
 

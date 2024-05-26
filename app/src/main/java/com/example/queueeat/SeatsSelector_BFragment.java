@@ -22,6 +22,7 @@ public class SeatsSelector_BFragment extends Fragment {
 
     private List<CheckBox> checkBoxList = new ArrayList<>();
     int currSeat;
+    static View v;
     public SeatsSelector_BFragment() {
         // Required empty public constructor
     }
@@ -29,7 +30,7 @@ public class SeatsSelector_BFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_seats_selector__b, container, false);
+        v = inflater.inflate(R.layout.fragment_seats_selector__b, container, false);
 
         // Populate checkbox list
         populateCheckBoxList(v);
@@ -74,7 +75,9 @@ public class SeatsSelector_BFragment extends Fragment {
 
         ListOfOrders.checkboxlist.addAll(checkBoxList);
     }
-
+    public static void uncheckSeat(){
+        FirebaseUtils.uncheckButtonOnceTimerIsDone(FirebaseFirestore.getInstance(), ListOfOrders.currSeat, v);
+    }
     // Method to attach listener to checkboxes
     private void attachCheckBoxListener() {
         CompoundButton.OnCheckedChangeListener checkBoxListener = new CompoundButton.OnCheckedChangeListener() {

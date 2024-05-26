@@ -26,6 +26,7 @@ import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.firestore.WriteBatch;
 import com.google.firebase.storage.StorageReference;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -50,11 +51,14 @@ public class FirebaseUtils {
     }
 
     public interface CurrentQueueListener {
-        void currentQueue(int queue);
+        void currentQueue(int queue, List<ForOrderClass> list);
     }
 
     public interface GetAllSalesFromTimeStamp{
         void getSales(double sales, int orderscount);
+    }
+    public interface SetUncheckListener{
+        void uncheck();
     }
 
 
@@ -210,7 +214,13 @@ public class FirebaseUtils {
 
     }
 
-    public static void uncheckButtonOnceTimerIsDone(int currSeat, View v){
+    public static void uncheckButtonOnceTimerIsDone(FirebaseFirestore f, int currSeat, View v){
+        f.collection("SEATS")
+                .whereEqualTo("seatNumber", currSeat)
+                .get()
+                .addOnCompleteListener(task -> {
+                    f.collection("SEATS").document("seat_" + currSeat).update("isTaken", false);
+                });
         if(v!=null){
             CheckBox c = v.findViewById(v.getResources().getIdentifier("checkBox" + currSeat, "id", v.getContext().getPackageName()));
 
@@ -303,22 +313,48 @@ public class FirebaseUtils {
 
     public static void getCurrentQueue(FirebaseFirestore f, String user, CurrentQueueListener queue) {
         f.collection("ORDERS")
-                .whereEqualTo("queue", true)
                 .whereEqualTo("user", user)
+                .whereIn("queue", Arrays.asList(true, false))
                 .addSnapshotListener((snap, e) -> {
-                    if (e != null) return;
+                    if (e != null) {
+                        return;
+                    }
+
+                    if (snap == null || snap.getDocumentChanges().isEmpty()) {
+                        return;
+                    }
+                    List<ForOrderClass> order = new ArrayList<>();
 
                     for (DocumentChange dc : snap.getDocumentChanges()) {
                         DocumentSnapshot doc = dc.getDocument();
 
-                        switch (dc.getType()) {
-                            case ADDED:
+                        List<Map<String, Object>> orderList = (List<Map<String, Object>>) doc.get("orderList");
+
+                        if (orderList != null) {
+                            for (Map<String, Object> map : orderList) {
+                                String itemName = (String) map.get("itemName");
+                                Double itemPrice = (Double) map.get("itemPrice");
+                                Long itemQuantity = (Long) map.get("itemQuantity");
+
+                                order.add(new ForOrderClass(itemName, itemPrice, itemQuantity.intValue()));
+                            }
+                        }
+                        if(Boolean.FALSE.equals(doc.getBoolean("queue"))){
+                            queue.currentQueue(-2, null);
+                        }
+                        switch (dc.getType()){
                             case MODIFIED:
-                                queue.currentQueue(Integer.parseInt(String.valueOf(doc.getLong("queueNumber"))));
+                                if(Boolean.FALSE.equals(doc.getBoolean("queue"))){
+                                    queue.currentQueue(-1, order);
+                                } else {
+                                    queue.currentQueue(Integer.parseInt(String.valueOf(doc.getLong("queueNumber"))), order);
+                                }
                         }
                     }
                 });
     }
+
+
 
     public static void moveQueue(FirebaseFirestore f, String docID) {
         // Set the queue field to false for the specified document

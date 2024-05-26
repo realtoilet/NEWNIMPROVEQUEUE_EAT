@@ -26,10 +26,11 @@ public class SeatsSelectorFragment extends Fragment {
         // Required empty public constructor
     }
 
+    static View v;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_seats_selector, container, false);
+        v = inflater.inflate(R.layout.fragment_seats_selector, container, false);
         populateCheckBoxList(v);
         attachCheckBoxListener();
 
@@ -72,8 +73,8 @@ public class SeatsSelectorFragment extends Fragment {
         ListOfOrders.checkboxlist.addAll(checkBoxList);
     }
 
-    public void uncheckSeat(){
-        FirebaseUtils.uncheckButtonOnceTimerIsDone(ListOfOrders.currSeat, this.getView());
+    public static void uncheckSeat(){
+        FirebaseUtils.uncheckButtonOnceTimerIsDone(FirebaseFirestore.getInstance(), ListOfOrders.currSeat, v);
     }
     // Method to attach listener to checkboxes
     private void attachCheckBoxListener() {
