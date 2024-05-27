@@ -5,7 +5,8 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".OwnTimerActivity">
+    tools:context=".OwnTimerActivity"
+    android:background="@color/bgcolor">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -151,14 +152,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.91727495" />
+                app:layout_constraintGuide_percent="0.96" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guideline17"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                app:layout_constraintGuide_begin="20dp" />
+                app:layout_constraintGuide_percent="0.05109489" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

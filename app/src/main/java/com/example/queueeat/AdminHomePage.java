@@ -73,7 +73,7 @@ public class AdminHomePage extends AppCompatActivity {
         }
 
         startResultLauncher();
-       bottomNavigationView = findViewById(R.id.admin_bottom_navigation );
+        bottomNavigationView = findViewById(R.id.admin_bottom_navigation );
         vp2 = findViewById(R.id.vp21);
 
         vp2.setAdapter(new ScreenSlidePageAdapter(this));
@@ -98,16 +98,16 @@ public class AdminHomePage extends AppCompatActivity {
                     vp2.setCurrentItem(1);
                     return true;
                 } else if (menuItem.getItemId() == R.id.seats) {
-                    vp2.setCurrentItem(2);
+                    vp2.setCurrentItem(2); // Skip placeholder, set seats to position 2
                     return true;
                 } else if (menuItem.getItemId() == R.id.adminUserProfile) {
-                    vp2.setCurrentItem(3);
+                    vp2.setCurrentItem(3); // Adjust adminUserProfile to position 3
                     return true;
                 }
                 return false;
             }
-
         });
+
 
         opendg = findViewById(R.id.btn_addToServings);
 

@@ -18,7 +18,7 @@
     <color name="white_cards_bg">#F6F6F6</color>
     <color name="white_gray">#E7E7E7</color>
     <color name="red">#721B0F</color>
-
+    <color name="semi_trans">#9AE7E7E7</color>
     <color name="original_text_color">#023C42</color>
     <color name="default_text_color">#023C42</color>
 
