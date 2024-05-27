@@ -51,10 +51,10 @@
 
         <TextView
             android:id="@+id/ReciptItemPrice"
-            android:layout_width="-0dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:fontFamily="@font/montserrat"
-            android:textAlignment="center"
+            android:textAlignment="viewEnd"
             android:text="Item Price"
             android:textColor="@color/black"
             android:textSize="15sp"
