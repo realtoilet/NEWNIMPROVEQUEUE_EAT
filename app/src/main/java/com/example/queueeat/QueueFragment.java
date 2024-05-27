@@ -64,6 +64,7 @@ public class QueueFragment extends Fragment {
                 });
             } else {
                 if (queueNumber == -1) {
+                    binding.reciptTotal.setVisibility(View.VISIBLE);
                     binding.queueNumber.setTextSize(TypedValue.COMPLEX_UNIT_SP, 40);
                     binding.queueNumber.setText("DONE");
                     Toast.makeText(getContext(), "Queue is done", Toast.LENGTH_SHORT).show();
@@ -76,10 +77,17 @@ public class QueueFragment extends Fragment {
                 } else if (queueNumber == -2) {
                     binding.queueNumber.setTextSize(TypedValue.COMPLEX_UNIT_SP, 40);
                     binding.queueNumber.setText("NONE");
+                    binding.reciptTotal.setVisibility(View.INVISIBLE);
                 } else {
+                    binding.reciptTotal.setVisibility(View.VISIBLE);
                     binding.queueNumber.setTextSize(TypedValue.COMPLEX_UNIT_SP, 100);
                     binding.queueNumber.setText(String.valueOf(queueNumber));
                     binding.rv.setAdapter(new rv_receipt(getContext(), list));
+                    double total = 0;
+                    for(ForOrderClass c : list){
+                        total += c.getItemPrice() * c.getItemQuantity();
+                    }
+                    binding.reciptTotal.setText("Total: " + total);
                 }
             }
         });
@@ -122,6 +130,7 @@ public class QueueFragment extends Fragment {
 
             @Override
             public void onFinish() {
+                countDownTimer.cancel();
                 binding.timernabaog.setText("00:00");
                 SeatsSelectorFragment.uncheckSeat();
                 SeatsSelector_BFragment.uncheckSeat();

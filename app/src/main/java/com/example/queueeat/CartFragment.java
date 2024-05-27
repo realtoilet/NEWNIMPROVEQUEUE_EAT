@@ -82,7 +82,7 @@ public class CartFragment extends Fragment {
                     ProductClass e = iterator.next();
                     for (ProductClass e1 : ListOfOrders.checkoutList) {
                         if (e.getDocId().equals(e1.getDocId())) {
-                            iterator.remove(); // Use iterator to remove the element safely
+                            iterator.remove();
                             adapter.notifyDataSetChanged();
                         }
                     }

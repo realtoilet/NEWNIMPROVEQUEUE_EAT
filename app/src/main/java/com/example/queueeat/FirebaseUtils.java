@@ -61,6 +61,10 @@ public class FirebaseUtils {
         void remove();
     }
 
+    public interface RetrieveAllProductsListener{
+        void products(List<ProductClass> l);
+    }
+
 
 
 
@@ -110,17 +114,19 @@ public class FirebaseUtils {
                 });
     }
 
-    public static void retrieveAllProducts(FirebaseFirestore d, Context c) {
+    public static void retrieveAllProducts(FirebaseFirestore d, Context c){
         List<ProductClass> p = new ArrayList<>();
 
         d.collection("PRODUCTS")
-                .addSnapshotListener((q, e) -> {
-                    if (e != null) return;
+                .addSnapshotListener((q, e)->{
+                    if(e!=null) return;
 
-                    for (DocumentChange dc : q.getDocumentChanges()) {
+                    for(DocumentChange dc : q.getDocumentChanges()){
                         DocumentSnapshot docs = dc.getDocument();
-                        switch (dc.getType()) {
+
+                        switch (dc.getType()){
                             case ADDED:
+                            case REMOVED:
                                 p.add(new ProductClass(docs.getString("itemName"), Uri.parse(docs.getString("itemImg")), docs.getDouble("itemPrice"), 0, docs.getId(), Integer.parseInt(docs.getLong("itemQuantity").toString()),docs.get("Type").toString()));
                         }
                     }
@@ -335,10 +341,6 @@ public class FirebaseUtils {
                         return;
                     }
 
-                    if (snap == null || snap.isEmpty()) {
-                        System.out.println("No documents found.");
-                        return;
-                    }
 
                     List<ForOrderClass> order = new ArrayList<>();
                     boolean queueFound = false;
@@ -362,10 +364,6 @@ public class FirebaseUtils {
                         Boolean isQueue = doc.getBoolean("queue");
                         Long queueNumber = doc.getLong("queueNumber");
 
-                        System.out.println("Document ID: " + doc.getId());
-                        System.out.println("Queue: " + isQueue);
-                        System.out.println("Queue Number: " + queueNumber);
-
                         if (isQueue != null && queueNumber != null) {
                             if (isQueue) {
                                 queue.currentQueue(queueNumber.intValue(), order);
@@ -388,11 +386,6 @@ public class FirebaseUtils {
                             default:
                                 break;
                         }
-                    }
-
-                    if (!queueFound) {
-                        // Handle the case where no queue document with queue=true is found
-                        queue.currentQueue(-2, null);
                     }
                 });
     }

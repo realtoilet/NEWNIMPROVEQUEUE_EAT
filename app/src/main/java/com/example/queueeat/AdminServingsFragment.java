@@ -65,7 +65,8 @@ public class AdminServingsFragment extends Fragment {
 //        rv.setAdapter(adapter);
 //    }
 public static void addToRecyclerview(List<StockClass> s, Context c){
-    rv.setAdapter(new StocksAdapter(s, c));
+        adapter = new StocksAdapter(s, c);
+    rv.setAdapter(adapter);
 }
 
     private void filter(String text) {

@@ -3,7 +3,13 @@ package com.example.queueeat;
 import android.net.Uri;
 
 public class ProductClass {
-    String itemName, itemType;
+    String itemName;
+
+    public void setItemType(String itemType) {
+        this.itemType = itemType;
+    }
+
+    String itemType;
     Uri itemURL;
     double itemPrice;
     int itemQuantity;
