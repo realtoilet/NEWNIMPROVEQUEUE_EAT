@@ -35,23 +35,26 @@ public class StocksAdapter extends RecyclerView.Adapter<StocksAdapter.ViewHolder
     public void onBindViewHolder(@NonNull StocksAdapter.ViewHolder h, int position) {
         StockClass sc = s.get(position);
 
-        h.delete.setOnClickListener(v-> {
-
+        h.delete.setOnClickListener(v -> {
             FirebaseUtils.removeProduct(FirebaseFirestore.getInstance(), sc.getDocID());
-            s.remove(h.getAdapterPosition());
-            notifyItemRemoved(h.getAdapterPosition());
+            int pos = h.getAdapterPosition();
+            if (pos != RecyclerView.NO_POSITION) {
+                s.remove(pos);
+                notifyItemRemoved(pos);
+            }
         });
+
         h.itemName.setText(sc.getName());
         h.type.setText(sc.getType());
         h.itemStocks.setText(String.valueOf(sc.getStocks()));
 
-        h.add.setOnClickListener(v->{
+        h.add.setOnClickListener(v -> {
             sc.setStocks(sc.getStocks() + 1);
             h.itemStocks.setText(String.valueOf(sc.getStocks()));
         });
 
-        h.min.setOnClickListener(v->{
-            if(sc.getStocks() > 0){
+        h.min.setOnClickListener(v -> {
+            if (sc.getStocks() > 0) {
                 sc.setStocks(sc.getStocks() - 1);
             }
             h.itemStocks.setText(String.valueOf(sc.getStocks()));
@@ -62,13 +65,14 @@ public class StocksAdapter extends RecyclerView.Adapter<StocksAdapter.ViewHolder
     public int getItemCount() {
         return s.size();
     }
-    public class ViewHolder extends RecyclerView.ViewHolder{
+
+    public class ViewHolder extends RecyclerView.ViewHolder {
         TextView itemName, itemStocks, type;
         CircleImageView add, min;
         ImageButton delete;
+
         public ViewHolder(@NonNull View v) {
             super(v);
-
             itemName = v.findViewById(R.id.name);
             itemStocks = v.findViewById(R.id.stock);
             add = v.findViewById(R.id.add);
