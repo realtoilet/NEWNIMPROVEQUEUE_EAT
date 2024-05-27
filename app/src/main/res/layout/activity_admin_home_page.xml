@@ -33,7 +33,7 @@
         android:backgroundTint="?attr/colorPrimary"
         app:fabCradleMargin="8dp"
         app:fabCradleVerticalOffset="10dp"
-        app:fabCradleRoundedCornerRadius="45dp"
+        app:fabCradleRoundedCornerRadius="0dp"
         app:fabAlignmentMode="center">
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
@@ -41,6 +41,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/admin_bottom_navigation"
             style="@style/Navigation"
+            android:layout_marginEnd="16dp"
             app:labelVisibilityMode="labeled"
             app:menu="@menu/adminnavmenu"
             android:background="@android:color/transparent"/>
