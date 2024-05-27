@@ -53,7 +53,6 @@ public class SigninPage extends AppCompatActivity {
             }
         }
 
-        FirebaseUtils.addAllSeats(FirebaseFirestore.getInstance());
 
     }
 

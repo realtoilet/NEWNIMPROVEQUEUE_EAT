@@ -53,7 +53,7 @@ public class QueueFragment extends Fragment {
         binding.queueNumber.setText("");
 
 
-        FirebaseUtils.getCurrentQueue(FirebaseFirestore.getInstance(), user, (queueNumber, list) -> {
+        FirebaseUtils.getCurrentQueue(FirebaseFirestore.getInstance(), user, (queueNumber, list) -> { // pag nag error check list agad
             if (queueNumber == -1) {
                 binding.queueNumber.setTextSize(TypedValue.COMPLEX_UNIT_SP, 40);
                 binding.queueNumber.setText("DONE");
