@@ -12,15 +12,16 @@
         android:layout_height="505dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0">
 
         <RelativeLayout
             android:id="@+id/relativeLayout3"
-            android:layout_width="171dp"
+            android:layout_width="141dp"
             android:layout_height="314dp"
             android:layout_alignParentStart="true"
-
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.459"
@@ -28,24 +29,18 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.556">
 
-            <ImageView
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:src="@drawable/bg_white_gray_card" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentBottom="true"
-                android:layout_marginStart="25dp"
-                android:layout_marginBottom="138dp"
+                android:background="@drawable/bg_table"
                 android:fontFamily="@font/montserrat"
-                android:textSize="30sp"
                 android:gravity="center"
                 android:text="Table A"
                 android:textAlignment="center"
                 android:textColor="@color/black"
+                android:textSize="30sp"
                 android:textStyle="bold" />
 
         </RelativeLayout>
@@ -74,9 +69,8 @@
             android:layout_centerHorizontal="true"
             android:button="@drawable/checkbox_selector"
             app:layout_constraintBottom_toTopOf="@+id/relativeLayout3"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/guideline52"
+            app:layout_constraintStart_toStartOf="@+id/guideline51"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="1.0" />
 
@@ -162,8 +156,8 @@
             android:textColor="@color/black"
             android:textSize="22sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/guideline52"
+            app:layout_constraintStart_toStartOf="@+id/guideline51"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.99" />
 
@@ -177,9 +171,8 @@
             android:textColor="@color/black"
             android:textSize="22sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.504"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/guideline52"
+            app:layout_constraintStart_toStartOf="@+id/guideline51"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.05" />
 
@@ -192,8 +185,8 @@
             android:layout_marginTop="4dp"
             android:button="@drawable/checkbox_selector"
             android:rotation="180"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/guideline52"
+            app:layout_constraintStart_toStartOf="@+id/guideline51"
             app:layout_constraintTop_toBottomOf="@+id/relativeLayout3" />
 
         <LinearLayout
@@ -274,5 +267,19 @@
                 android:button="@drawable/checkbox_selector"
                 android:rotation="-90" />
         </LinearLayout>
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline51"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.35333332" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline52"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.6333333" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
