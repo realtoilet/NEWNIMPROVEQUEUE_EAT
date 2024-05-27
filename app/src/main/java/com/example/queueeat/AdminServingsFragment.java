@@ -2,17 +2,16 @@ package com.example.queueeat;
 
 import android.content.Context;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -37,6 +36,10 @@ public class AdminServingsFragment extends Fragment {
         rv.setLayoutManager(new LinearLayoutManager(getContext()));
         FirebaseUtils.retrieveAllServings(FirebaseFirestore.getInstance(), getContext());
 
+        // Initialize the adapter with an empty list
+        adapter = new StocksAdapter(filteredStocks, getContext());
+        rv.setAdapter(adapter);
+
         searchEditText = v.findViewById(R.id.searchUserEditText);
         searchEditText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -56,18 +59,20 @@ public class AdminServingsFragment extends Fragment {
         return v;
     }
 
-//    public static void addToRecyclerview(List<StockClass> s, Context c){
-//        stocks.clear();
-//        stocks.addAll(s);
-//        filteredStocks.clear();
-//        filteredStocks.addAll(s);
-//        adapter = new StocksAdapter(filteredStocks, c);
-//        rv.setAdapter(adapter);
-//    }
-public static void addToRecyclerview(List<StockClass> s, Context c){
-        adapter = new StocksAdapter(s, c);
-    rv.setAdapter(adapter);
-}
+    public static void addToRecyclerview(List<StockClass> s, Context c) {
+        stocks.clear();
+        stocks.addAll(s);
+        filteredStocks.clear();
+        filteredStocks.addAll(s);
+
+        // Ensure the adapter field is assigned and notify changes
+        if (adapter == null) {
+            adapter = new StocksAdapter(filteredStocks, c);
+            rv.setAdapter(adapter);
+        } else {
+            adapter.notifyDataSetChanged();
+        }
+    }
 
     private void filter(String text) {
         filteredStocks.clear();
@@ -80,6 +85,12 @@ public static void addToRecyclerview(List<StockClass> s, Context c){
                 }
             }
         }
-        adapter.notifyDataSetChanged();
+
+        // Ensure the adapter is not null before notifying changes
+        if (adapter != null) {
+            adapter.notifyDataSetChanged();
+        } else {
+            Log.e("AdminServingsFragment", "Adapter is null in filter method");
+        }
     }
 }
