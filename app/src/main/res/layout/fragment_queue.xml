@@ -181,6 +181,7 @@
                 android:textColor="@color/black" />
 
             <ImageView
+                android:id="@+id/bot_bar"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:src="@color/black"
@@ -220,14 +221,47 @@
                 android:layout_marginEnd="15dp"
                 android:textColor="@color/grey" />
 
-
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv"
                 android:layout_width="300dp"
-                android:layout_height="268dp"
-                android:layout_alignParentBottom="true"
+                android:layout_height="237dp"
+                android:layout_below="@+id/bot_bar"
                 android:layout_centerHorizontal="true"
                 android:background="@color/white_cards_bg" />
+
+
+            <ImageView
+                android:id="@+id/bar"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:src="@color/black"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="30dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/montserrat"
+                android:textSize="18sp"
+                android:layout_alignParentBottom="true"
+               android:layout_toLeftOf="@+id/recipt_total"
+                android:text="Total:"
+                android:layout_marginEnd="5dp"
+                android:textColor="@color/grey" />
+
+            <TextView
+                android:id="@+id/recipt_total"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/montserrat"
+                android:textSize="18sp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                android:text="999999"
+                android:layout_marginEnd="10dp"
+                android:textColor="@color/grey" />
+
+
         </RelativeLayout>
 
 

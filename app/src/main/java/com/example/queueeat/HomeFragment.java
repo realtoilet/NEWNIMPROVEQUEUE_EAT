@@ -119,7 +119,7 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        homeusername.setText(SharedPrefUtils.returnUsernameForData(getContext()));
+        homeusername.setText("hi, "+ SharedPrefUtils.returnUsernameForData(getContext()));
         user = SharedPrefUtils.returnUsernameForData(getContext());
         return view;
     }

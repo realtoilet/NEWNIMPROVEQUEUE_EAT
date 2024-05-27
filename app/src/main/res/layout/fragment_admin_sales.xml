@@ -145,13 +145,26 @@
                     />
 
                 <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginTop="5dp"
+                    android:text="₱"
+                    android:layout_toLeftOf="@+id/numOfcapital"
+                    android:textColor="@color/black"
+                    android:textSize="23dp"
+                    android:layout_marginEnd="70dp"
+                    />
+
+                <EditText
                     android:id="@+id/numOfcapital"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/montserrat"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
-                    android:text="₱990"
+                    android:text="990"
                     android:textColor="@color/black"
                     android:textSize="23dp"
                     android:layout_marginEnd="20dp"
