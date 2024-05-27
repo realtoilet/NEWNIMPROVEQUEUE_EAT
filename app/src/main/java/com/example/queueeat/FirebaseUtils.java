@@ -244,6 +244,22 @@ public class FirebaseUtils {
                 });
     }
 
+    public static void setSeatForOwnMeal(FirebaseFirestore f){
+        f.collection("SEATS")
+                .whereEqualTo("seatNumber", ListOfOrders.currSeat)
+                .get()
+                .addOnSuccessListener(task -> {
+                    if (!task.isEmpty()) {
+                        for (DocumentSnapshot doc : task) {
+                            f.collection("SEATS")
+                                    .document(doc.getId())
+                                    .update("isTaken", true);
+                        }
+                    }
+                });
+
+    }
+
     public static void retrieveAllOrders(FirebaseFirestore f, QueueListener q) {
         f.collection("ORDERS")
                 .whereEqualTo("queue", true)

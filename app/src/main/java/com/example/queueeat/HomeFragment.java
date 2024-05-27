@@ -1,18 +1,24 @@
 package com.example.queueeat;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import  android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager2.adapter.FragmentStateAdapter;
+import androidx.viewpager2.widget.ViewPager2;
 
 import android.text.TextWatcher;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -34,7 +40,7 @@ public class HomeFragment extends Fragment {
     List<ProductClass> p;
     static RecyclerView recyclerView;
     TextView homeusername;
-    View a,b;
+    View a,b, c;
 
     public HomeFragment(String user){
         this.user = user;
@@ -57,6 +63,8 @@ public class HomeFragment extends Fragment {
         homeusername = view.findViewById(R.id.HomeUsername);
         a = view.findViewById(R.id.fakeButton_Snacks);
         b = view.findViewById(R.id.fakeButton_meals);
+        c = view.findViewById(R.id.fakeButton_Ownmeal);
+
         EditText editTextSearch = view.findViewById(R.id.searchUserEditText);
 
         // Set the initial state: meals button selected
@@ -85,6 +93,10 @@ public class HomeFragment extends Fragment {
                 setColors((LinearLayout) a, false, R.id.Snacks, R.id.tv_snacks);
                 FirebaseUtils.filterAllProducts(FirebaseFirestore.getInstance(), getContext(), "Meals");
             }
+        });
+
+        c.setOnClickListener(c->{
+            openDiag();
         });
 
         // Set TextChangedListener for EditText
@@ -135,9 +147,80 @@ public class HomeFragment extends Fragment {
     }
 
 
+    public void openDiag() {
+        Dialog d = new Dialog(getContext());
+        d.setContentView(R.layout.seats_popup_dialog);
+        d.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        d.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        d.getWindow().setGravity(Gravity.CENTER);
+        d.setCancelable(true);
+        d.show();
 
+        ViewPager2 vp = d.findViewById(R.id.vp2);
+        ImageView next = d.findViewById(R.id.next);
+        ImageView prev = d.findViewById(R.id.prev);
+        Button btn = d.findViewById(R.id.btn_next);
 
+        vp.setAdapter(new HomeFragment.ScreenSlidePageAdapter(this));
+        vp.setUserInputEnabled(false);
 
+        vp.setOffscreenPageLimit(8);
+
+        next.setOnClickListener(v -> {
+            if (vp.getCurrentItem() < 8) {
+                vp.setCurrentItem(vp.getCurrentItem() + 1);
+            }
+        });
+
+        prev.setOnClickListener(v -> {
+            if (vp.getCurrentItem() > 0) {
+                vp.setCurrentItem(vp.getCurrentItem() - 1);
+            }
+        });
+
+        btn.setOnClickListener(v->{
+            FirebaseUtils.setSeatForOwnMeal(FirebaseFirestore.getInstance());
+            HomePage.vp2.setCurrentItem(HomePage.vp2.getCurrentItem() + 1);
+            ListOfOrders.state = "ownmeal";
+            d.dismiss();
+        });
+    }
+
+    private class ScreenSlidePageAdapter extends FragmentStateAdapter {
+        public ScreenSlidePageAdapter(HomeFragment ac) {
+            super(ac);
+        }
+
+        @NonNull
+        @Override
+        public Fragment createFragment(int position) {
+            switch (position) {
+                case 0:
+                    return new SeatsSelectorFragment();
+                case 1:
+                    return new SeatsSelector_BFragment();
+                case 2:
+                    return new Seats_Selector_CFragment();
+                case 3:
+                    return new Seats_Selector_DFragment();
+                case 4:
+                    return new Seats_Selector_EFragment();
+                case 5:
+                    return new Seats_Selector_FFragment();
+                case 6:
+                    return new Seats_Selector_GFragment();
+                case 7:
+                    return new Seats_Selector_HFragment();
+                default:
+                    return null;
+            }
+        }
+
+        @Override
+        public int getItemCount() {
+            return 8;
+        }
+    }
 
 
     public static void addToRecyclerView(List<ProductClass> p, Context c){

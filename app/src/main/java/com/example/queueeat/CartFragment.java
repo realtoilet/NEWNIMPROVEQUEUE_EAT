@@ -35,6 +35,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -76,45 +77,27 @@ public class CartFragment extends Fragment {
         btn_delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                boolean isAnyChecked = false;
-
-                // Check if any CheckBox is checked
-                for (int i = 0; i < rv.getChildCount(); i++) {
-                    View view = rv.getChildAt(i);
-                    CheckBox cb = view.findViewById(R.id.cb);
-                    if (cb != null && cb.isChecked()) {
-                        isAnyChecked = true;
-                        break;
-                    }
-                }
-
-                if (isAnyChecked) {
-                    // Uncheck all checkboxes
-                    for (int i = 0; i < rv.getChildCount(); i++) {
-                        View view = rv.getChildAt(i);
-                        CheckBox cb = view.findViewById(R.id.cb);
-                        if (cb != null) {
-                            cb.setChecked(false);
+                Iterator<ProductClass> iterator = ListOfOrders.orderList.iterator();
+                while (iterator.hasNext()) {
+                    ProductClass e = iterator.next();
+                    for (ProductClass e1 : ListOfOrders.checkoutList) {
+                        if (e.getDocId().equals(e1.getDocId())) {
+                            iterator.remove(); // Use iterator to remove the element safely
+                            adapter.notifyDataSetChanged();
                         }
                     }
-
-                    // Clear the cart lists
-                    ListOfOrders.orderList.clear();
-                    ListOfOrders.checkoutList.clear();
-
-                    // Notify the adapter after all items are cleared and unchecked
-                    adapter.notifyDataSetChanged();
-
-                    // Update the UI
-                    CartFragment.updateButton();
-                    CartFragment.updateTextview();
-
-                    cb.setChecked(false);
                 }
+
+                ListOfOrders.checkoutList.clear();
+                adapter.notifyDataSetChanged();
+
+                // Update the UI
+                CartFragment.updateButton();
+                CartFragment.updateTextview();
+
+                cb.setChecked(false);
             }
         });
-
-
 
 
         btn_popup.setOnClickListener(new View.OnClickListener() {
@@ -209,8 +192,7 @@ public class CartFragment extends Fragment {
                         }
                     }
                     HomePage.vp2.setCurrentItem(HomePage.vp2.getCurrentItem() - 1);
-
-                    // Schedule the timer
+                    cb.setChecked(false);
                     long durationMillis = 40 * 60 * 1000; // 40 minutes
                     long endTimeMillis = System.currentTimeMillis() + durationMillis;
 

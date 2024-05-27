@@ -16,6 +16,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -37,7 +38,7 @@ public class QueueFragment extends Fragment {
     private TextView timerTextView; // TextView to display the timer
     private CountDownTimer countDownTimer;
     private SharedViewModel sharedViewModel;
-    long timeLeftInMillis = 6000;//1200000;
+    long timeLeftInMillis = 2400000;
 
     // Constructor with user parameter
     public QueueFragment(String user) {
@@ -54,18 +55,32 @@ public class QueueFragment extends Fragment {
         binding.queueNumber.setText("");
         binding.rv.setLayoutManager(new LinearLayoutManager(getContext()));
         FirebaseUtils.getCurrentQueue(FirebaseFirestore.getInstance(), user, (queueNumber, list) -> { // pag nag error check list agad
-            if (queueNumber == -1) {
+            if(ListOfOrders.state.equals("ownmeal")){
                 binding.queueNumber.setTextSize(TypedValue.COMPLEX_UNIT_SP, 40);
-                binding.queueNumber.setText("DONE");
-                Toast.makeText(getContext(), "Queue is done", Toast.LENGTH_SHORT).show();
+                binding.queueNumber.setText("OWN");
                 startTimer();
-            } else if (queueNumber == -2) {
-                binding.queueNumber.setTextSize(TypedValue.COMPLEX_UNIT_SP, 40);
-                binding.queueNumber.setText("NONE");
+                binding.endTimer.setOnClickListener(v->{
+                    openDiag();
+                });
             } else {
-                binding.queueNumber.setTextSize(TypedValue.COMPLEX_UNIT_SP, 100);
-                binding.queueNumber.setText(String.valueOf(queueNumber));
-                binding.rv.setAdapter(new rv_receipt(getContext(), list));
+                if (queueNumber == -1) {
+                    binding.queueNumber.setTextSize(TypedValue.COMPLEX_UNIT_SP, 40);
+                    binding.queueNumber.setText("DONE");
+                    Toast.makeText(getContext(), "Queue is done", Toast.LENGTH_SHORT).show();
+                    startTimer();
+
+                    binding.endTimer.setOnClickListener(v->{
+                        openDiag();
+                    });
+
+                } else if (queueNumber == -2) {
+                    binding.queueNumber.setTextSize(TypedValue.COMPLEX_UNIT_SP, 40);
+                    binding.queueNumber.setText("NONE");
+                } else {
+                    binding.queueNumber.setTextSize(TypedValue.COMPLEX_UNIT_SP, 100);
+                    binding.queueNumber.setText(String.valueOf(queueNumber));
+                    binding.rv.setAdapter(new rv_receipt(getContext(), list));
+                }
             }
         });
 
@@ -74,54 +89,29 @@ public class QueueFragment extends Fragment {
         return rootView;
     }
 
-    public void startCountdownTimer(long durationInMillis) {
-        if (countDownTimer != null) {
-            countDownTimer.cancel();
-        }
 
-        countDownTimer = new CountDownTimer(durationInMillis, 1000) {
-            @Override
-            public void onTick(long millisUntilFinished) {
-                long minutes = TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished);
-                long seconds = TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) % 60;
-                timerTextView.setText(String.format("%02d:%02d", minutes, seconds));
-            }
+    public void openDiag() {
+        Dialog d = new Dialog(getContext());
+        d.setContentView(R.layout.end_timer_dialog);
+        d.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        d.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        d.getWindow().setGravity(Gravity.CENTER);
+        d.setCancelable(true);
+        d.show();
 
-            @Override
-            public void onFinish() {
-                timerTextView.setText("00:00");
-            }
-        }.start();
+        FrameLayout end = d.findViewById(R.id.endTimer_continue);
+        FrameLayout cancel = d.findViewById(R.id.endTimer_cancel);
+
+        cancel.setOnClickListener(c->{
+            d.dismiss();
+        });
+
+        end.setOnClickListener(e->{
+            countDownTimer.onFinish();
+            d.dismiss();
+        });
+
     }
-
-    private void showEndTimerDialog() {
-        if (endTimerDialog == null) {
-            // Inflate the end_timer_dialog layout only once
-            endTimerDialog = new Dialog(getContext());
-            endTimerDialog.setContentView(R.layout.end_timer_dialog); // Update with your layout resource ID
-
-            // Find FrameLayouts by ID and set click listeners
-            FrameLayout endTimerCancel = endTimerDialog.findViewById(R.id.endTimer_cancel);
-            FrameLayout endTimerContinue = endTimerDialog.findViewById(R.id.endTimer_continue);
-
-            endTimerCancel.setOnClickListener(v -> {
-                // Handle cancel button click (e.g., dismiss dialog)
-                Log.d("QueueFragment", "End timer cancelled");
-                endTimerDialog.dismiss();
-            });
-
-            endTimerContinue.setOnClickListener(v -> {
-                // Handle continue button click (e.g., perform actions and dismiss dialog)
-                Log.d("QueueFragment", "End timer continued");
-                // Add your logic for continuing the timer here (if applicable)
-                endTimerDialog.dismiss();
-            });
-        }
-        endTimerDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-        endTimerDialog.getWindow().setGravity(Gravity.CENTER);
-        endTimerDialog.show(); // Show the inflated dialog
-    }
-
     private void startTimer() {
         countDownTimer = new CountDownTimer(timeLeftInMillis, 1000) {
             @Override

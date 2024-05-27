@@ -14,4 +14,5 @@ public class ListOfOrders {
     public static List<ProductClass> checkoutList = new ArrayList<>();
     public static int currSeat = 0;
     public static List<CheckBox> checkboxlist = new ArrayList<>();
+    public static String state = "";
 }
