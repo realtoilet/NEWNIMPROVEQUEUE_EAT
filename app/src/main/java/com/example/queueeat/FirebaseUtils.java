@@ -315,16 +315,20 @@ public class FirebaseUtils {
         f.collection("ORDERS")
                 .whereEqualTo("user", user)
                 .whereIn("queue", Arrays.asList(true, false))
-                .orderBy("queue")
+                .orderBy("queue", Query.Direction.ASCENDING)
                 .addSnapshotListener((snap, e) -> {
                     if (e != null) {
+                        System.err.println("Error: " + e.getMessage());
                         return;
                     }
 
-                    if (snap == null || snap.getDocumentChanges().isEmpty()) {
+                    if (snap == null || snap.isEmpty()) {
+                        System.out.println("No documents found.");
                         return;
                     }
+
                     List<ForOrderClass> order = new ArrayList<>();
+                    boolean queueFound = false;
 
                     for (DocumentChange dc : snap.getDocumentChanges()) {
                         DocumentSnapshot doc = dc.getDocument();
@@ -340,23 +344,44 @@ public class FirebaseUtils {
                                 order.add(new ForOrderClass(itemName, itemPrice, itemQuantity.intValue()));
                             }
                         }
-                        if(Boolean.FALSE.equals(doc.getBoolean("queue"))){
-                            queue.currentQueue(-2, null);
-                        } else {
-                            queue.currentQueue(Integer.parseInt(String.valueOf(doc.getLong("queueNumber"))), order);
+
+                        Boolean isQueue = doc.getBoolean("queue");
+                        Long queueNumber = doc.getLong("queueNumber");
+
+                        System.out.println("Document ID: " + doc.getId());
+                        System.out.println("Queue: " + isQueue);
+                        System.out.println("Queue Number: " + queueNumber);
+
+                        if (isQueue != null && queueNumber != null) {
+                            if (isQueue) {
+                                queue.currentQueue(queueNumber.intValue(), order);
+                                queueFound = true;
+                            } else {
+                                queue.currentQueue(-2, null);
+                            }
                         }
-                        switch (dc.getType()){
+
+                        switch (dc.getType()) {
                             case MODIFIED:
-                                if(Boolean.FALSE.equals(doc.getBoolean("queue"))){
-                                    queue.currentQueue(-1, order);
-                                } else {
-                                    queue.currentQueue(Integer.parseInt(String.valueOf(doc.getLong("queueNumber"))), order);
+                                if (isQueue != null && queueNumber != null) {
+                                    if (isQueue) {
+                                        queue.currentQueue(queueNumber.intValue(), order);
+                                    } else {
+                                        queue.currentQueue(-1, order);
+                                    }
                                 }
+                                break;
+                            default:
+                                break;
                         }
+                    }
+
+                    if (!queueFound) {
+                        // Handle the case where no queue document with queue=true is found
+                        queue.currentQueue(-2, null);
                     }
                 });
     }
-
 
 
     public static void moveQueue(FirebaseFirestore f, String docID) {
