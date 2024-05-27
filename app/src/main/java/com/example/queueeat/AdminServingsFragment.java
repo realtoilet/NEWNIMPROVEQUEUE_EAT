@@ -35,10 +35,9 @@ public class AdminServingsFragment extends Fragment {
 
         rv = v.findViewById(R.id.rv);
         rv.setLayoutManager(new LinearLayoutManager(getContext()));
-
-        searchEditText = v.findViewById(R.id.searchUserEditText);
         FirebaseUtils.retrieveAllServings(FirebaseFirestore.getInstance(), getContext());
 
+        searchEditText = v.findViewById(R.id.searchUserEditText);
         searchEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -57,14 +56,17 @@ public class AdminServingsFragment extends Fragment {
         return v;
     }
 
-    public static void addToRecyclerview(List<StockClass> s, Context c){
-        stocks.clear();
-        stocks.addAll(s);
-        filteredStocks.clear();
-        filteredStocks.addAll(s);
-        adapter = new StocksAdapter(filteredStocks, c);
-        rv.setAdapter(adapter);
-    }
+//    public static void addToRecyclerview(List<StockClass> s, Context c){
+//        stocks.clear();
+//        stocks.addAll(s);
+//        filteredStocks.clear();
+//        filteredStocks.addAll(s);
+//        adapter = new StocksAdapter(filteredStocks, c);
+//        rv.setAdapter(adapter);
+//    }
+public static void addToRecyclerview(List<StockClass> s, Context c){
+    rv.setAdapter(new StocksAdapter(s, c));
+}
 
     private void filter(String text) {
         filteredStocks.clear();

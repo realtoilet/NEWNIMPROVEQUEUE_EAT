@@ -57,8 +57,8 @@ public class FirebaseUtils {
     public interface GetAllSalesFromTimeStamp{
         void getSales(double sales, int orderscount);
     }
-    public interface SetUncheckListener{
-        void uncheck();
+    public interface RemoveItemsListener{
+        void remove();
     }
 
 
@@ -121,7 +121,6 @@ public class FirebaseUtils {
                         DocumentSnapshot docs = dc.getDocument();
                         switch (dc.getType()) {
                             case ADDED:
-                            case REMOVED:
                                 p.add(new ProductClass(docs.getString("itemName"), Uri.parse(docs.getString("itemImg")), docs.getDouble("itemPrice"), 0, docs.getId(), Integer.parseInt(docs.getLong("itemQuantity").toString()),docs.get("Type").toString()));
                         }
                     }
@@ -152,17 +151,15 @@ public class FirebaseUtils {
 
     public static void retrieveAllServings(FirebaseFirestore d, Context c) {
         List<StockClass> p = new ArrayList<>();
-
         d.collection("PRODUCTS")
                 .addSnapshotListener((q, e) -> {
                     if (e != null) return;
-
                     for (DocumentChange dc : q.getDocumentChanges()) {
                         DocumentSnapshot docs = dc.getDocument();
                         switch (dc.getType()) {
                             case ADDED:
-                            case REMOVED:
                                 p.add(new StockClass(docs.getString("itemName"), Integer.parseInt(docs.getLong("itemQuantity").toString()), docs.getId(), docs.getString("Type")));
+                                break;
                         }
                     }
                     AdminServingsFragment.addToRecyclerview(p, c);
@@ -422,10 +419,9 @@ public class FirebaseUtils {
         Timestamp start = DateUtils.getStartOfDay(2024, Calendar.MAY, Calendar.getInstance().get(Calendar.DAY_OF_MONTH) +1);
         Timestamp end = DateUtils.getEndOfDay(2024, Calendar.MAY, Calendar.getInstance().get(Calendar.DAY_OF_MONTH) +1);
         f.collection("ORDERS")
-                .whereGreaterThanOrEqualTo("timestamp", start)
-                .whereLessThanOrEqualTo("timestamp", end)
                 .addSnapshotListener((snap, e)->{
                     if(e != null) return;
+                    double totalSales = 0;
                     List<ForOrderClass> order = new ArrayList<>();
                     for(DocumentChange dc : snap.getDocumentChanges()){
                         DocumentSnapshot doc = dc.getDocument();
@@ -438,15 +434,12 @@ public class FirebaseUtils {
                                 Long itemQuantity = (Long) map.get("itemQuantity");
 
                                 order.add(new ForOrderClass(itemName, itemPrice, itemQuantity.intValue()));
+
+                                totalSales += itemPrice * itemQuantity;
                             }
                         }
 
                     }
-                    double totalSales = 0;
-                    for (ForOrderClass orders : order){
-                        totalSales += orders.getItemPrice() * orders.getItemQuantity();
-                    }
-
                     sales.getSales(totalSales, snap.size());
                 });
     }

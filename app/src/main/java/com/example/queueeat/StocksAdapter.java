@@ -36,11 +36,10 @@ public class StocksAdapter extends RecyclerView.Adapter<StocksAdapter.ViewHolder
         StockClass sc = s.get(position);
 
         h.delete.setOnClickListener(v-> {
-            for (int i = 0; i < s.size(); i++) {
-                s.remove(i);
-                this.notifyItemRemoved(i);
-                FirebaseUtils.removeProduct(FirebaseFirestore.getInstance(), sc.getDocID());
-            }
+
+            FirebaseUtils.removeProduct(FirebaseFirestore.getInstance(), sc.getDocID());
+            s.remove(h.getAdapterPosition());
+            notifyItemRemoved(h.getAdapterPosition());
         });
         h.itemName.setText(sc.getName());
         h.type.setText(sc.getType());

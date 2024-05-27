@@ -70,23 +70,26 @@
 
 
                 <TextView
+                    android:id="@+id/textView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="20dp"
                     android:fontFamily="@font/montserrat"
                     android:text="Sold"
                     android:textColor="@color/black"
-                    android:layout_centerVertical="true"
-                    android:textSize="23dp"
-                    android:layout_marginStart="20dp" />
+                    android:textSize="23dp" />
 
                 <ImageView
                     android:id="@+id/dash2"
                     android:layout_width="80dp"
                     android:layout_height="5dp"
-                    android:src="@drawable/dashh"
-                    android:layout_centerHorizontal="true"
                     android:layout_centerVertical="true"
-                    />
+                    android:layout_marginStart="45dp"
+                    android:layout_marginEnd="32dp"
+                    android:layout_toStartOf="@+id/numOfSold"
+                    android:layout_toEndOf="@+id/textView"
+                    android:src="@drawable/dashh" />
 
                 <TextView
                     android:id="@+id/numOfSold"
