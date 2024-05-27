@@ -67,7 +67,7 @@
             android:layout_below="@+id/adminname"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="example@gmail.com"
+            android:text="admin@gmail.com"
             android:textColor="@color/black"
             android:layout_marginTop="10dp"
             android:textSize="15sp"
