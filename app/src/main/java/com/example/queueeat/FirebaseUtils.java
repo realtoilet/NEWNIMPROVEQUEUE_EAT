@@ -114,7 +114,7 @@ public class FirebaseUtils {
                 });
     }
 
-    public static void retrieveAllProducts(FirebaseFirestore d, Context c){
+    public static void retrieveAllProducts(FirebaseFirestore d, Context c, RetrieveAllProductsListener retrieve){
         List<ProductClass> p = new ArrayList<>();
 
         d.collection("PRODUCTS")
@@ -126,11 +126,22 @@ public class FirebaseUtils {
 
                         switch (dc.getType()){
                             case ADDED:
-                            case REMOVED:
                                 p.add(new ProductClass(docs.getString("itemName"), Uri.parse(docs.getString("itemImg")), docs.getDouble("itemPrice"), 0, docs.getId(), Integer.parseInt(docs.getLong("itemQuantity").toString()),docs.get("Type").toString()));
+                                break;
+                            case REMOVED:
+                                String deletedItemId = docs.getId();
+                                for (ProductClass product : p) {
+                                    if (product.getDocId().equals(deletedItemId)) {
+                                        p.remove(product);
+                                        break;
+                                    }
+                                }
+                                break;
+
                         }
                     }
-                    HomeFragment.addToRecyclerView(p, c);
+
+                    retrieve.products(p);
                 });
     }
     public interface KupalKaSalon{

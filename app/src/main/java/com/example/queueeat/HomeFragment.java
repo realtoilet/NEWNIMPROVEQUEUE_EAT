@@ -8,6 +8,7 @@ import  android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
@@ -39,9 +40,11 @@ public class HomeFragment extends Fragment {
 
     List<ProductClass> p;
     static RecyclerView recyclerView;
+    RecyclerViewAdapter rva;
     TextView homeusername;
     View a,b, c;
 
+    String currentState = "";
     public HomeFragment(String user){
         this.user = user;
     }
@@ -54,11 +57,19 @@ public class HomeFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-
-        FirebaseUtils.retrieveAllProducts(FirebaseFirestore.getInstance(), getContext());
-
-        // Execute this when the app starts and meals button is preselected
-        FirebaseUtils.filterAllProducts(FirebaseFirestore.getInstance(), getContext(), "Meals");
+        p = new ArrayList<>();
+        rva = new RecyclerViewAdapter(p, getContext(), user);
+        recyclerView.setAdapter(rva);
+        currentState = "Meals";
+        filterRecyclerView(p, getContext(), "Meals");
+        FirebaseUtils.retrieveAllProducts(FirebaseFirestore.getInstance(), getContext(), new FirebaseUtils.RetrieveAllProductsListener() {
+            @Override
+            public void products(List<ProductClass> l) {
+                p.clear();
+                p.addAll(l);
+                filterRecyclerView(p, getContext(), currentState);
+            }
+        });
 
         homeusername = view.findViewById(R.id.HomeUsername);
         a = view.findViewById(R.id.fakeButton_Snacks);
@@ -79,7 +90,8 @@ public class HomeFragment extends Fragment {
                 b.setEnabled(true);
                 setColors((LinearLayout) a, true, R.id.Snacks, R.id.tv_snacks);
                 setColors((LinearLayout) b, false, R.id.mealsicon, R.id.tv_meals);
-                FirebaseUtils.filterAllProducts(FirebaseFirestore.getInstance(), getContext(), "Snacks");
+                currentState = "Snacks";
+                filterRecyclerView(p, getContext(), "Snacks");
             }
         });
 
@@ -91,7 +103,8 @@ public class HomeFragment extends Fragment {
                 a.setEnabled(true);
                 setColors((LinearLayout) b, true, R.id.mealsicon, R.id.tv_meals);
                 setColors((LinearLayout) a, false, R.id.Snacks, R.id.tv_snacks);
-                FirebaseUtils.filterAllProducts(FirebaseFirestore.getInstance(), getContext(), "Meals");
+                currentState = "Meals";
+                filterRecyclerView(p, getContext(), "Meals");
             }
         });
 
@@ -145,7 +158,6 @@ public class HomeFragment extends Fragment {
             Log.e("MyApp", "ImageView or TextView is null in setColors");
         }
     }
-
 
     public void openDiag() {
         Dialog d = new Dialog(getContext());
@@ -223,9 +235,6 @@ public class HomeFragment extends Fragment {
     }
 
 
-    public static void addToRecyclerView(List<ProductClass> p, Context c){
-        recyclerView.setAdapter(new RecyclerViewAdapter(p, c, user));
-    }
     public static void filterRecyclerView(List<ProductClass> p, Context c, String filter){
         List<ProductClass> b = new ArrayList<>();
         for(ProductClass item : p){
