@@ -315,6 +315,7 @@ public class FirebaseUtils {
         f.collection("ORDERS")
                 .whereEqualTo("user", user)
                 .whereIn("queue", Arrays.asList(true, false))
+                .orderBy("queue")
                 .addSnapshotListener((snap, e) -> {
                     if (e != null) {
                         return;
@@ -341,6 +342,8 @@ public class FirebaseUtils {
                         }
                         if(Boolean.FALSE.equals(doc.getBoolean("queue"))){
                             queue.currentQueue(-2, null);
+                        } else {
+                            queue.currentQueue(Integer.parseInt(String.valueOf(doc.getLong("queueNumber"))), order);
                         }
                         switch (dc.getType()){
                             case MODIFIED:
