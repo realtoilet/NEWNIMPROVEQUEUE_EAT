@@ -336,6 +336,7 @@ public class FirebaseUtils {
                         List<Map<String, Object>> orderList = (List<Map<String, Object>>) doc.get("orderList");
 
                         if (orderList != null) {
+                            order.clear();
                             for (Map<String, Object> map : orderList) {
                                 String itemName = (String) map.get("itemName");
                                 Double itemPrice = (Double) map.get("itemPrice");
@@ -382,6 +383,8 @@ public class FirebaseUtils {
                     }
                 });
     }
+
+
 
 
     public static void moveQueue(FirebaseFirestore f, String docID) {

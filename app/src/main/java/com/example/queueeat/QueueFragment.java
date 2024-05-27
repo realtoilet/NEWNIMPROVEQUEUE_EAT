@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.Observer;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.work.WorkInfo;
 import androidx.work.WorkManager;
 import androidx.work.WorkQuery;
@@ -51,8 +52,7 @@ public class QueueFragment extends Fragment {
         View rootView = binding.getRoot();
         firestore = FirebaseFirestore.getInstance();
         binding.queueNumber.setText("");
-
-
+        binding.rv.setLayoutManager(new LinearLayoutManager(getContext()));
         FirebaseUtils.getCurrentQueue(FirebaseFirestore.getInstance(), user, (queueNumber, list) -> { // pag nag error check list agad
             if (queueNumber == -1) {
                 binding.queueNumber.setTextSize(TypedValue.COMPLEX_UNIT_SP, 40);
@@ -65,6 +65,7 @@ public class QueueFragment extends Fragment {
             } else {
                 binding.queueNumber.setTextSize(TypedValue.COMPLEX_UNIT_SP, 100);
                 binding.queueNumber.setText(String.valueOf(queueNumber));
+                binding.rv.setAdapter(new rv_receipt(getContext(), list));
             }
         });
 
