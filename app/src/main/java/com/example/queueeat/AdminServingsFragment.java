@@ -62,8 +62,6 @@ public class AdminServingsFragment extends Fragment {
     public static void addToRecyclerview(List<StockClass> s, Context c) {
         stocks.clear();
         stocks.addAll(s);
-        filteredStocks.clear();
-        filteredStocks.addAll(s);
 
         // Ensure the adapter field is assigned and notify changes
         if (adapter == null) {

@@ -2,19 +2,10 @@ package com.example.queueeat;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffColorFilter;
-import  android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager2.adapter.FragmentStateAdapter;
-import androidx.viewpager2.widget.ViewPager2;
-
+import android.os.Bundle;
+import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,16 +14,19 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager2.adapter.FragmentStateAdapter;
+import androidx.viewpager2.widget.ViewPager2;
+
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
-import android.text.Editable;
-import android.util.Log;
-import android.widget.SearchView;
-import android.widget.TextView;
-
-import com.google.firebase.firestore.FirebaseFirestore;
 
 public class HomeFragment extends Fragment {
     private static final String ARG_USER = "user";
@@ -42,14 +36,12 @@ public class HomeFragment extends Fragment {
     static RecyclerView recyclerView;
     RecyclerViewAdapter rva;
     TextView homeusername;
-    View a,b, c;
+    View a, b, c;
 
     String currentState = "";
-    public HomeFragment(String user){
+    public HomeFragment(String user) {
         this.user = user;
     }
-
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -82,7 +74,7 @@ public class HomeFragment extends Fragment {
         setColors((LinearLayout) b, true, R.id.mealsicon, R.id.tv_meals);
         setColors((LinearLayout) a, false, R.id.Snacks, R.id.tv_snacks);
 
-        // Set OnClickListener for Snacks button
+        // Button click listeners
         a.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -95,7 +87,6 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        // Set OnClickListener for Meals button
         b.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -108,7 +99,7 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        c.setOnClickListener(c->{
+        c.setOnClickListener(c -> {
             openDiag();
         });
 
@@ -132,7 +123,7 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        homeusername.setText("hi, "+ SharedPrefUtils.returnUsernameForData(getContext()));
+        homeusername.setText("hi, " + SharedPrefUtils.returnUsernameForData(getContext()));
         user = SharedPrefUtils.returnUsernameForData(getContext());
         return view;
     }
@@ -173,7 +164,7 @@ public class HomeFragment extends Fragment {
         ImageView prev = d.findViewById(R.id.prev);
         Button btn = d.findViewById(R.id.btn_next);
 
-        vp.setAdapter(new HomeFragment.ScreenSlidePageAdapter(this));
+        vp.setAdapter(new ScreenSlidePageAdapter(this));
         vp.setUserInputEnabled(false);
 
         vp.setOffscreenPageLimit(8);
@@ -190,13 +181,24 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        btn.setOnClickListener(v->{
+        btn.setOnClickListener(v -> {
             FirebaseUtils.setSeatForOwnMeal(FirebaseFirestore.getInstance());
             HomePage.vp2.setCurrentItem(HomePage.vp2.getCurrentItem() + 1);
             ListOfOrders.state = "ownmeal";
             d.dismiss();
         });
     }
+
+    public static void filterRecyclerView(List<ProductClass> p, Context c, String filter){
+        List<ProductClass> filteredList = new ArrayList<>();
+        for(ProductClass item : p){
+            if(item.getItemType().equals(filter)){
+                filteredList.add(item);
+            }
+        }
+        recyclerView.setAdapter(new RecyclerViewAdapter(filteredList, c, user));
+    }
+
 
     private class ScreenSlidePageAdapter extends FragmentStateAdapter {
         public ScreenSlidePageAdapter(HomeFragment ac) {
@@ -232,16 +234,5 @@ public class HomeFragment extends Fragment {
         public int getItemCount() {
             return 8;
         }
-    }
-
-
-    public static void filterRecyclerView(List<ProductClass> p, Context c, String filter){
-        List<ProductClass> b = new ArrayList<>();
-        for(ProductClass item : p){
-            if(item.getItemType().equals(filter)){
-                b.add(item);
-            }
-        }
-        recyclerView.setAdapter(new RecyclerViewAdapter(b,c,user));
     }
 }

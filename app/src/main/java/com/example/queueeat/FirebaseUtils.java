@@ -88,6 +88,7 @@ public class FirebaseUtils {
                         }
                     }
                 });
+
     }
 
     public void loginAccount(String name, String password, FirebaseFirestore db, LoginCallback cb) {

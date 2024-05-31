@@ -121,6 +121,7 @@ public class QueueFragment extends Fragment {
 
     }
     private void startTimer() {
+         timeLeftInMillis = 2400000;
         countDownTimer = new CountDownTimer(timeLeftInMillis, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
