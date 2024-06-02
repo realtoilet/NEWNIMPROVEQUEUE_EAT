@@ -37,8 +37,7 @@ public class QueueFragment extends Fragment {
     private Dialog endTimerDialog; // Reference to hold the inflated dialog instance
     private TextView timerTextView; // TextView to display the timer
     private CountDownTimer countDownTimer;
-    private SharedViewModel sharedViewModel;
-    long timeLeftInMillis = 2400000;
+    private long timeLeftInMillis = 2400000;
 
     // Constructor with user parameter
     public QueueFragment(String user) {
@@ -53,42 +52,39 @@ public class QueueFragment extends Fragment {
         View rootView = binding.getRoot();
         firestore = FirebaseFirestore.getInstance();
         binding.queueNumber.setText("");
-        binding.rv.setLayoutManager(new LinearLayoutManager(getContext()));
-        FirebaseUtils.getCurrentQueue(FirebaseFirestore.getInstance(), user, (queueNumber, list) -> { // pag nag error check list agad
-            if(ListOfOrders.state.equals("ownmeal")){
+        ListOfOrders.state.observe(getViewLifecycleOwner(), state -> {
+            if ("ownmeal".equals(state)) {
+                ListOfOrders.state.setValue(null);
+                timeLeftInMillis = 2400000;
                 binding.queueNumber.setTextSize(TypedValue.COMPLEX_UNIT_SP, 40);
                 binding.queueNumber.setText("OWN");
                 startTimer();
-                binding.endTimer.setOnClickListener(v->{
-                    openDiag();
-                });
+                binding.endTimer.setOnClickListener(v -> openDiag());
+            }
+        });
+        binding.rv.setLayoutManager(new LinearLayoutManager(getContext()));
+        FirebaseUtils.getCurrentQueue(FirebaseFirestore.getInstance(), user, (queueNumber, list) -> {
+            if (queueNumber == -1) {
+                timeLeftInMillis = 2400000;
+                binding.reciptTotal.setVisibility(View.VISIBLE);
+                binding.queueNumber.setTextSize(TypedValue.COMPLEX_UNIT_SP, 40);
+                binding.queueNumber.setText("DONE");
+                startTimer();
+                binding.endTimer.setOnClickListener(v -> openDiag());
+            } else if (queueNumber == -2) {
+                binding.queueNumber.setTextSize(TypedValue.COMPLEX_UNIT_SP, 40);
+                binding.queueNumber.setText("NONE");
+                binding.reciptTotal.setVisibility(View.INVISIBLE);
             } else {
-                if (queueNumber == -1) {
-                    binding.reciptTotal.setVisibility(View.VISIBLE);
-                    binding.queueNumber.setTextSize(TypedValue.COMPLEX_UNIT_SP, 40);
-                    binding.queueNumber.setText("DONE");
-                    Toast.makeText(getContext(), "Queue is done", Toast.LENGTH_SHORT).show();
-                    startTimer();
-
-                    binding.endTimer.setOnClickListener(v->{
-                        openDiag();
-                    });
-
-                } else if (queueNumber == -2) {
-                    binding.queueNumber.setTextSize(TypedValue.COMPLEX_UNIT_SP, 40);
-                    binding.queueNumber.setText("NONE");
-                    binding.reciptTotal.setVisibility(View.INVISIBLE);
-                } else {
-                    binding.reciptTotal.setVisibility(View.VISIBLE);
-                    binding.queueNumber.setTextSize(TypedValue.COMPLEX_UNIT_SP, 100);
-                    binding.queueNumber.setText(String.valueOf(queueNumber));
-                    binding.rv.setAdapter(new rv_receipt(getContext(), list));
-                    double total = 0;
-                    for(ForOrderClass c : list){
-                        total += c.getItemPrice() * c.getItemQuantity();
-                    }
-                    binding.reciptTotal.setText("Total: " + total);
+                binding.reciptTotal.setVisibility(View.VISIBLE);
+                binding.queueNumber.setTextSize(TypedValue.COMPLEX_UNIT_SP, 100);
+                binding.queueNumber.setText(String.valueOf(queueNumber));
+                binding.rv.setAdapter(new rv_receipt(getContext(), list));
+                double total = 0;
+                for (ForOrderClass c : list) {
+                    total += c.getItemPrice() * c.getItemQuantity();
                 }
+                binding.reciptTotal.setText("Total: " + total);
             }
         });
 
@@ -110,18 +106,22 @@ public class QueueFragment extends Fragment {
         FrameLayout end = d.findViewById(R.id.endTimer_continue);
         FrameLayout cancel = d.findViewById(R.id.endTimer_cancel);
 
-        cancel.setOnClickListener(c->{
+        cancel.setOnClickListener(c -> {
             d.dismiss();
         });
 
-        end.setOnClickListener(e->{
-            countDownTimer.onFinish();
+        end.setOnClickListener(e -> {
+            stopTimer();
+            binding.timernabaog.setText("00:00");
             d.dismiss();
         });
 
     }
+
     private void startTimer() {
-         timeLeftInMillis = 2400000;
+        if (countDownTimer != null) {
+            countDownTimer.cancel(); // Cancel any existing timer
+        }
         countDownTimer = new CountDownTimer(timeLeftInMillis, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
@@ -143,6 +143,14 @@ public class QueueFragment extends Fragment {
                 Seats_Selector_HFragment.uncheckSeat();
             }
         }.start();
+    }
+
+    private void stopTimer() {
+        if (countDownTimer != null) {
+            countDownTimer.cancel();
+            countDownTimer.onFinish();
+            countDownTimer = null; // Remove reference to the timer
+        }
     }
 
     private void updateTimer() {

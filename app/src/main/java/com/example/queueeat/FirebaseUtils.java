@@ -406,7 +406,6 @@ public class FirebaseUtils {
 
 
     public static void moveQueue(FirebaseFirestore f, String docID) {
-        // Set the queue field to false for the specified document
         f.collection("ORDERS").document(docID).update("queue", false)
                 .addOnCompleteListener(updateTask -> {
                     if (updateTask.isSuccessful()) {
@@ -417,7 +416,7 @@ public class FirebaseUtils {
                                     if (task.isSuccessful()) {
                                         QuerySnapshot snap = task.getResult();
 
-                                        if (snap != null && !snap.isEmpty()) {
+                                        if (snap != null) {
                                             for (DocumentSnapshot doc : snap) {
                                                 String docId = doc.getId();
                                                 Long seatNumberLong = doc.getLong("queueNumber");

@@ -1,7 +1,7 @@
 package com.example.queueeat;
 
 import android.widget.CheckBox;
-
+import androidx.lifecycle.MutableLiveData;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -14,5 +14,5 @@ public class ListOfOrders {
     public static List<ProductClass> checkoutList = new ArrayList<>();
     public static int currSeat = 0;
     public static List<CheckBox> checkboxlist = new ArrayList<>();
-    public static String state = "";
+    public static MutableLiveData<String> state = new MutableLiveData<>();
 }

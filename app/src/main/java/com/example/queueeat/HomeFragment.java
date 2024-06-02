@@ -184,7 +184,7 @@ public class HomeFragment extends Fragment {
         btn.setOnClickListener(v -> {
             FirebaseUtils.setSeatForOwnMeal(FirebaseFirestore.getInstance());
             HomePage.vp2.setCurrentItem(HomePage.vp2.getCurrentItem() + 1);
-            ListOfOrders.state = "ownmeal";
+            ListOfOrders.state.setValue("ownmeal");
             d.dismiss();
         });
     }
