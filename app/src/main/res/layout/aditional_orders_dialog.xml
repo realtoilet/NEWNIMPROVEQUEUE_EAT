@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="710dp"
+        android:background="@drawable/bg_seats_dialog">
+
+        <RelativeLayout
+            android:id="@+id/relativeLayout2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:background="@drawable/bg_card_cyan"
+            android:padding="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:fontFamily="@font/montserrat"
+                android:gravity="center"
+                android:text="Order more "
+                android:textColor="@color/white"
+                android:textSize="32sp"
+                android:textStyle="bold" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:padding="10dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_above="@+id/framelayout"
+            android:layout_marginBottom="8dp"
+            android:orientation="horizontal"
+            >
+
+            <RelativeLayout
+                android:id="@+id/_additional_order_btn_meals"
+                android:layout_width="160dp"
+                android:layout_height="match_parent"
+                android:background="@drawable/btn_bg"
+                android:padding="5dp">
+                <ImageView
+                    android:id="@+id/meals_icon"
+                    android:layout_width="50dp"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/ic_meals"/>
+
+                <TextView
+                   android:layout_marginStart="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Meals"
+                    android:textSize="20sp"
+                    android:textColor="@color/icon_btn_color"
+                   android:layout_toRightOf="@+id/meals_icon"/>
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:id="@+id/_additional_order_btn_snacks"
+                android:layout_width="160dp"
+                android:layout_height="match_parent"
+                android:background="@drawable/btn_bg"
+                android:padding="5dp"
+                android:layout_alignParentEnd="true">
+                <ImageView
+                    android:id="@+id/snacks_icon"
+                    android:layout_width="50dp"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/ic_chocogreensvg"/>
+
+                <TextView
+                    android:layout_marginStart="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Snacks"
+                    android:textSize="20sp"
+                    android:textColor="@color/icon_btn_color"
+                    android:layout_toRightOf="@+id/snacks_icon"/>
+            </RelativeLayout>
+
+
+        </RelativeLayout>
+
+
+
+      <FrameLayout
+          android:id="@+id/framelayout"
+          android:layout_width="match_parent"
+          android:layout_height="470dp"
+          android:layout_marginStart="30dp"
+          android:layout_above="@+id/additional_order_btn_done"
+          android:layout_centerHorizontal="true"
+          android:layout_marginBottom="20dp">
+
+          <androidx.recyclerview.widget.RecyclerView
+              android:id="@+id/rv_items"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"/>
+      </FrameLayout>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/additional_order_btn_done"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/btnround"
+            android:text="CHECKOUT"
+            android:textColor="@color/white" />
+
+
+    </RelativeLayout>
+
+
+</androidx.cardview.widget.CardView>
