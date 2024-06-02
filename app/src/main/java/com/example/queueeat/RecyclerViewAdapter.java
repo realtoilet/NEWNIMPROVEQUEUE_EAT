@@ -3,12 +3,12 @@ package com.example.queueeat;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
-import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -26,9 +26,10 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.Viewholder> implements Filterable {
+public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.Viewholder> {
 
     private List<ProductClass> pFiltered; // Filtered list for search functionality
+
     private List<ProductClass> p;
     private Context c;
     public CheckForNewData check = null;
@@ -64,11 +65,42 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         holder.itemName.setText(pcopy.getItemName());
         holder.itemPrice.setText("₱" + pcopy.getItemPrice());
 
+//        // Adjust text size for itemName if it exceeds 6 characters
+//        if (holder.itemName.getText().length() > 4) {
+//            int originalTextSizeSp = (int) (holder.itemName.getTextSize() / holder.itemName.getResources().getDisplayMetrics().scaledDensity);
+//            int excessCharacters = holder.itemName.getText().length() - 4;
+//            int newTextSizeSp = originalTextSizeSp - (3 * excessCharacters);
+//
+//            if (newTextSizeSp < 23) {
+//                newTextSizeSp = 23; // Ensure the text size does not go below 23sp
+//            }
+//
+//            holder.itemName.setTextSize(TypedValue.COMPLEX_UNIT_SP, newTextSizeSp);
+//        }
+//
+//        // Measure the text width for itemPrice and adjust the text size if it exceeds 100dp
+//        holder.itemPrice.post(() -> {
+//            DisplayMetrics metrics = holder.itemPrice.getContext().getResources().getDisplayMetrics();
+//            float maxTextWidth = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 80, metrics);
+//
+//            holder.itemPrice.measure(0, 0);
+//            float textWidth = holder.itemPrice.getMeasuredWidth();
+//
+//            if (textWidth > maxTextWidth) {
+//                int originalTextSizeSp = (int) (holder.itemPrice.getTextSize() / metrics.scaledDensity);
+//                int excessCharacters = (int) ((textWidth - maxTextWidth) / (textWidth / holder.itemPrice.getText().length()));
+//                int newTextSizeSp = originalTextSizeSp - (2 * excessCharacters);
+//
+//                holder.itemPrice.setTextSize(TypedValue.COMPLEX_UNIT_SP, newTextSizeSp);
+//            }
+//        });
+
         holder.fakeBtn.setOnClickListener(v -> FirebaseUtils.checkIfOrdered(FirebaseFirestore.getInstance(), user, new FirebaseUtils.CheckForUserOrderListener() {
             @Override
             public void hasOrders(boolean allow) {
                 if (allow) {
-                    ProductClass pcopy1 = pFiltered.get(holder.getAdapterPosition());
+                    Toast.makeText(c, "Item has been added to cart.", Toast.LENGTH_SHORT).show();
+                    ProductClass pcopy1 = p.get(holder.getAdapterPosition());
                     boolean found = false;
                     for (int i = 0; i < ListOfOrders.orderList.size(); i++) {
                         if (pcopy1.getDocId().equals(ListOfOrders.orderList.get(i).getDocId())) {
@@ -81,7 +113,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                     }
 
                     if (!found) {
-                        ListOfOrders.orderList.add(new ProductClass(pcopy1.getItemName(), pcopy1.getItemURL(), pcopy1.getItemPrice(), pcopy1.getItemQuantity() + 1, pcopy1.getDocId(), pcopy1.getItemStocks(), pcopy1.getItemType()));
+                        ListOfOrders.orderList.add(new ProductClass(pcopy1.getItemName(), pcopy1.getItemURL(), pcopy1.getItemPrice(), pcopy.getItemQuantity() + 1, pcopy.getDocId(), pcopy1.getItemStocks(),pcopy1.getItemType()));
                         if (CartFragment.btn_popup != null) {
                             CartFragment.updateButton();
                         }
@@ -94,7 +126,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                     }
                     System.out.println("------------------------------------------------------------------");
                 } else {
-                    Toast.makeText(c, "You have an ongoing order. Please wait for it to finish.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(c, "You have a undergoing order. Please wait for it to finish.", Toast.LENGTH_SHORT).show();
                 }
             }
         }));
@@ -105,7 +137,30 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         return pFiltered.size(); // Return size of filtered list
     }
 
-    @Override
+    public class Viewholder extends RecyclerView.ViewHolder {
+        ImageView cardbg;
+        TextView itemPrice;
+        ImageView namebg;
+        TextView itemName;
+        CircleImageView itemImage;
+        RelativeLayout imageBorder;
+
+        CircleImageView fakeBtn;
+        FloatingActionButton btn_addToServings;
+
+        public Viewholder(@NonNull View itemView) {
+            super(itemView);
+            itemImage = itemView.findViewById(R.id.itemImage);
+            itemName = itemView.findViewById(R.id.itemName);
+            cardbg = itemView.findViewById(R.id.cardbg);
+            itemPrice = itemView.findViewById(R.id.itemPrice);
+            imageBorder = itemView.findViewById(R.id.image_border);
+            fakeBtn = itemView.findViewById(R.id.fake_add_button);
+            btn_addToServings = itemView.findViewById(R.id.btn_addToServings);
+        }
+    }
+
+
     public Filter getFilter() {
         return new Filter() {
             @Override
@@ -137,28 +192,5 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     public void setInterface(CheckForNewData check) {
         this.check = check;
-    }
-
-    public class Viewholder extends RecyclerView.ViewHolder {
-        ImageView cardbg;
-        TextView itemPrice;
-        ImageView namebg;
-        TextView itemName;
-        CircleImageView itemImage;
-        RelativeLayout imageBorder;
-
-        CircleImageView fakeBtn;
-        FloatingActionButton btn_addToServings;
-
-        public Viewholder(@NonNull View itemView) {
-            super(itemView);
-            itemImage = itemView.findViewById(R.id.itemImage);
-            itemName = itemView.findViewById(R.id.itemName);
-            cardbg = itemView.findViewById(R.id.cardbg);
-            itemPrice = itemView.findViewById(R.id.itemPrice);
-            imageBorder = itemView.findViewById(R.id.image_border);
-            fakeBtn = itemView.findViewById(R.id.fake_add_button);
-            btn_addToServings = itemView.findViewById(R.id.btn_addToServings);
-        }
     }
 }
