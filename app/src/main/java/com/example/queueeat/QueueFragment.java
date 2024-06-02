@@ -69,12 +69,12 @@ public class QueueFragment extends Fragment {
                 binding.reciptTotal.setVisibility(View.VISIBLE);
                 binding.queueNumber.setTextSize(TypedValue.COMPLEX_UNIT_SP, 40);
                 binding.queueNumber.setText("DONE");
+                binding.timernabaog.setVisibility(View.VISIBLE);
                 startTimer();
                 binding.endTimer.setOnClickListener(v -> openDiag());
             } else if (queueNumber == -2) {
                 binding.queueNumber.setTextSize(TypedValue.COMPLEX_UNIT_SP, 40);
                 binding.queueNumber.setText("NONE");
-                binding.reciptTotal.setVisibility(View.INVISIBLE);
             } else {
                 binding.reciptTotal.setVisibility(View.VISIBLE);
                 binding.queueNumber.setTextSize(TypedValue.COMPLEX_UNIT_SP, 100);
@@ -84,6 +84,10 @@ public class QueueFragment extends Fragment {
                 for (ForOrderClass c : list) {
                     total += c.getItemPrice() * c.getItemQuantity();
                 }
+                binding.reciptTotal.setVisibility(View.VISIBLE);
+                binding.receiptContainer.setVisibility(View.VISIBLE);
+                binding.zig.setVisibility(View.VISIBLE);
+                binding.reciptTotal.setVisibility(View.VISIBLE);
                 binding.reciptTotal.setText("Total: " + total);
             }
         });

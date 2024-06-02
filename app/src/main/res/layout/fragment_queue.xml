@@ -77,6 +77,7 @@
                     android:textSize="10sp" />
 
                 <TextView
+                    android:visibility="invisible"
                     android:id="@+id/timernabaog"
                     style="@style/stayNigga"
                     android:layout_width="150dp"
@@ -136,6 +137,8 @@
         </RelativeLayout>
 
         <ir.beigirad.zigzagview.ZigzagView
+            android:id="@+id/zig"
+            android:visibility="invisible"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             app:zigzagBackgroundColor="@color/white_cards_bg"
@@ -146,6 +149,7 @@
             app:zigzagSides="top" />
 
         <RelativeLayout
+            android:visibility="invisible"
             android:id="@+id/receipt_container"
             android:layout_width="300dp"
             android:layout_height="360dp"
@@ -239,6 +243,7 @@
                 android:layout_marginBottom="30dp"/>
 
             <TextView
+                android:visibility="invisible"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/montserrat"
